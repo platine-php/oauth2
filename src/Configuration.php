@@ -91,6 +91,6 @@ class Configuration extends AbstractConfiguration
                 'token' => 'oauth_token',
                 'owner' => 'owner',
             ],
-	];
+        ];
     }
 }

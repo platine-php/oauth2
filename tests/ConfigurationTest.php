@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use Platine\Dev\PlatineTestCase;
 use Platine\OAuth2\Configuration;
 
-
 /**
  * Configuration class tests
  *
