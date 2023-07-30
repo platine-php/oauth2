@@ -55,6 +55,78 @@ use Platine\Stdlib\Config\AbstractConfiguration;
 class Configuration extends AbstractConfiguration
 {
     /**
+     * Return the access token request attribute value
+     * @return string
+     */
+    public function getTokenRequestAttribute(): string
+    {
+        return $this->get('request_attribute.token');
+    }
+
+    /**
+     * Return the owner request attribute value
+     * @return string
+     */
+    public function getOwnerRequestAttribute(): string
+    {
+        return $this->get('request_attribute.owner');
+    }
+
+    /**
+     * Return the authorization code TTL value
+     * @return int
+     */
+    public function getAuthorizationCodeTtl(): int
+    {
+        return $this->get('ttl.authorization_code');
+    }
+
+    /**
+     * Return the access token TTL value
+     * @return int
+     */
+    public function getAccessTokenTtl(): int
+    {
+        return $this->get('ttl.access_token');
+    }
+
+    /**
+     * Return the refresh token TTL value
+     * @return int
+     */
+    public function getRefreshTokenTtl(): int
+    {
+        return $this->get('ttl.refresh_token');
+    }
+
+    /**
+     * Whether need rotate refresh token
+     * @return bool
+     */
+    public function isRotateRefreshToken(): bool
+    {
+        return $this->get('rotate_refresh_token');
+    }
+
+    /**
+     * Whether need rotate refresh token after revocation
+     * @return bool
+     */
+    public function isRevokeRotatedRefreshToken(): bool
+    {
+        return $this->get('revoke_rotated_refresh_token');
+    }
+
+    /**
+     * Return the supported grants
+     * @return array<int, string>
+     */
+    public function getGrants(): array
+    {
+        return $this->get('grants');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getValidationRules(): array

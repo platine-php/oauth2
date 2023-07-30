@@ -29,9 +29,31 @@ class ConfigurationTest extends PlatineTestCase
         $cfg->get('not_found_config');
     }
 
-    public function testGetSuccess()
+    public function testGetDefaultValuesSuccess()
     {
-        $cfg = new Configuration(['ttl' => ['authorization_code' => 120]]);
+        $cfg = new Configuration([]);
         $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
+        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
+        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
+        $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
+        $this->assertEquals(3600, $cfg->getAccessTokenTtl());
+        $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
+        $this->assertFalse($cfg->isRotateRefreshToken());
+        $this->assertTrue($cfg->isRevokeRotatedRefreshToken());
+        $this->assertCount(0, $cfg->getGrants());
+    }
+
+    public function testGetValuesSuccess()
+    {
+        $cfg = new Configuration(['grants' => ['foo', 'bar'], 'rotate_refresh_token' => true]);
+        $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
+        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
+        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
+        $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
+        $this->assertEquals(3600, $cfg->getAccessTokenTtl());
+        $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
+        $this->assertTrue($cfg->isRotateRefreshToken());
+        $this->assertTrue($cfg->isRevokeRotatedRefreshToken());
+        $this->assertCount(2, $cfg->getGrants());
     }
 }
