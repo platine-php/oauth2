@@ -1,6 +1,6 @@
 {
     "name": "platine-php/oauth2",
-    "description": "Platine Lang is a translation library with extensible translator and storage.",
+    "description": "Platine OAuth2 is a library that implements the OAuth2 specification",
     "type": "library",
     "license": "MIT",
     "keywords": ["application", "oauth2", "framework", "php", "platine", "api", "rest", "authorization", "access_token", "scope"],

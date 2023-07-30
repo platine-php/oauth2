@@ -1,5 +1,5 @@
 ## PLATINE OAUTH2
-**Platine Lang is a translation library with extensible translator and storage.**
+**Platine OAuth2 is a library that implements the OAuth2 specification**
 
 [![Project Status](http://opensource.box.com/badges/active.svg)](http://opensource.box.com/badges)
 [![Latest Stable Version](https://poser.pugx.org/platine-php/oauth2/v)](https://packagist.org/packages/platine-php/oauth2)
