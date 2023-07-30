@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Platine Lang
+ * Platine OAuth2
  *
- * Platine Lang is a translation library with extensible translator and storage
+ * Platine OAuth2 is a library that implements the OAuth2 specification
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2020 Platine Lang
+ * Copyright (c) 2020 Platine OAuth2
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,9 +31,9 @@
 /**
  *  @file Configuration.php
  *
- *  The language Configuration class
+ *  The OAuth2 Configuration class
  *
- *  @package    Platine\Lang
+ *  @package    Platine\OAuth2
  *  @author Platine Developers Team
  *  @copyright  Copyright (c) 2020
  *  @license    http://opensource.org/licenses/MIT  MIT License
@@ -44,13 +44,13 @@
 
 declare(strict_types=1);
 
-namespace Platine\Lang;
+namespace Platine\OAuth2;
 
 use Platine\Stdlib\Config\AbstractConfiguration;
 
 /**
- * Class Configuration
- * @package Platine\Lang
+ * @class Configuration
+ * @package Platine\OAuth2
  */
 class Configuration extends AbstractConfiguration
 {
@@ -60,12 +60,16 @@ class Configuration extends AbstractConfiguration
     public function getValidationRules(): array
     {
         return [
-            'locale' => 'string',
-            'store_name' => 'string',
-            'domain' => 'string',
-            'encoding' => 'string',
-            'translation_path' => 'string',
-            'locales' => 'array'
+            'request_attribute' => 'array',
+            'request_attribute.token' => 'string',
+            'request_attribute.owner' => 'string',
+            'ttl' => 'array',
+            'ttl.authorization_code' => 'integer',
+            'ttl.access_token' => 'integer',
+            'ttl.refresh_token' => 'integer',
+            'rotate_refresh_token' => 'boolean',
+            'revoke_rotated_refresh_token' => 'boolean',
+            'grants' => 'array'
         ];
     }
 
@@ -75,12 +79,18 @@ class Configuration extends AbstractConfiguration
     public function getDefault(): array
     {
         return [
-        'locale' => 'en_US',
-        'store_name' => 'app_lang',
-        'domain' => 'languages',
-        'encoding' => 'UTF-8',
-        'translation_path' => 'lang',
-        'locales' => ['en_US']
-        ];
+            'grants' => [],
+            'ttl' => [
+                'authorization_code' => 120,
+                'access_token' => 3600,
+                'refresh_token' => 86400,
+            ],
+            'rotate_refresh_token' => false,
+            'revoke_rotated_refresh_token' => true,
+            'request_attribute' => [
+                'token' => 'oauth_token',
+                'owner' => 'owner',
+            ],
+	];
     }
 }

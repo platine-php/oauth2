@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Platine\Test\Lang;
+namespace Platine\OAuth2\Test;
 
 use InvalidArgumentException;
 use Platine\Dev\PlatineTestCase;
-use Platine\Lang\Configuration;
+use Platine\OAuth2\Configuration;
+
 
 /**
  * Configuration class tests
  *
  * @group core
- * @group language
+ * @group oauth2
  */
 class ConfigurationTest extends PlatineTestCase
 {
@@ -31,7 +32,7 @@ class ConfigurationTest extends PlatineTestCase
 
     public function testGetSuccess()
     {
-        $cfg = new Configuration(['locale' => 'fr_FR']);
-        $this->assertEquals('fr_FR', $cfg->get('locale'));
+        $cfg = new Configuration(['ttl' => ['authorization_code' => 120]]);
+        $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
     }
 }
