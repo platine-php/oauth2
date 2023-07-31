@@ -38,6 +38,7 @@ use Platine\OAuth2\AuthorizationServerInterface;
 use Platine\OAuth2\Entity\Client;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Exception\OAuth2Exception;
+use Platine\OAuth2\Response\RedirectResponse;
 use Platine\OAuth2\Service\AccessTokenService;
 use Platine\OAuth2\Service\AuthorizationCodeService;
 use Platine\OAuth2\Service\RefreshTokenService;
@@ -124,6 +125,20 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
         // Scope and state allow to perform additional validation
         $scope = $queryParams['scope'] ?? null;
         $state = $queryParams['state'] ?? null;
+        $scopes = is_string($scope) ? explode(' ', $scope) : [];
+        $authorizationCode = $this->authorizationCodeService->createToken(
+            $redirectUri,
+            $owner,
+            $client,
+            $scopes
+        );
+
+        $uri = http_build_query(array_filter([
+            'code' => $authorizationCode->getToken(),
+            'state' => $state,
+        ]));
+
+        return new RedirectResponse($redirectUri . '?' . $uri);
     }
 
     /**
@@ -134,6 +149,44 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
         ?Client $client = null,
         ?TokenOwnerInterface $owner = null
     ): ResponseInterface {
+        $postParams = $request->getParsedBody();
+        $code = $postParams['code'] ?? null;
+
+        if ($code === null) {
+            throw OAuth2Exception::invalidRequest('Could not find the authorization code in the request');
+        }
+
+        $authorizationCode = $this->authorizationCodeService->getToken($code);
+        if ($authorizationCode === null || $authorizationCode->isExpired()) {
+            throw OAuth2Exception::invalidGrant('Authorization code cannot be found or is expired');
+        }
+
+        $clientId = $postParams['client_id'] ?? null;
+        if ($authorizationCode->getClient()->getId() !== $clientId) {
+            throw OAuth2Exception::invalidRequest(
+                'Authorization code\'s client does not match with the one that created the authorization code'
+            );
+        }
+
+        // If owner is null, we reuse the same as the authorization code
+        if ($owner === null) {
+            $owner = $authorizationCode->getOwner();
+        }
+
+        $scopes = $authorizationCode->getScopes();
+        $accessToken = $this->accessTokenService->createToken($owner, $client, $scopes);
+        // Before generating a refresh token, we must make sure the
+        //  authorization server supports this grant
+
+        $refreshToken = null;
+        if (
+            $this->authorizationServer !== null &&
+            $this->authorizationServer->hasGrant(RefreshTokenGrant::GRANT_TYPE)
+        ) {
+            $refreshToken = $this->refreshTokenService->createToken($owner, $client, $scopes);
+        }
+
+        return $this->generateTokenResponse($accessToken, $refreshToken);
     }
 
     /**
@@ -142,6 +195,7 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
     public function setAuthorizationServer(
         AuthorizationServerInterface $authorizationServer
     ): void {
+        $this->authorizationServer = $authorizationServer;
     }
 
     /**

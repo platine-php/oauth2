@@ -30,18 +30,23 @@
 
 declare(strict_types=1);
 
-namespace Platine\OAuth2;
+namespace Platine\OAuth2\Response;
+
+use Platine\Http\Response;
 
 /**
- * @class AuthorizationServerInterface
- * @package Platine\OAuth2
+ * @class RedirectResponse
+ * @package Platine\OAuth2\Response
  */
-interface AuthorizationServerInterface
+class RedirectResponse extends Response
 {
     /**
-     * Whether the authorization server the given grant
-     * @param string $grant
-     * @return bool
+     * Create new instance
+     * @param string $uri
      */
-    public function hasGrant(string $grant): bool;
+    public function __construct(string $uri = '/')
+    {
+        parent::__construct(302);
+        $this->headers['location'] = [$uri];
+    }
 }

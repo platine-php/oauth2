@@ -48,7 +48,7 @@ abstract class BaseGrant implements GrantInterface
      */
     public function getType(): string
     {
-        return self::GRANT_TYPE;
+        return static::GRANT_TYPE;
     }
 
     /**
@@ -56,7 +56,7 @@ abstract class BaseGrant implements GrantInterface
      */
     public function getResponseType(): string
     {
-        return self::GRANT_RESPONSE_TYPE;
+        return static::GRANT_RESPONSE_TYPE;
     }
 
     /**
