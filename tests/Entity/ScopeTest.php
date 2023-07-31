@@ -26,7 +26,6 @@ class ScopeTest extends PlatineTestCase
         $this->assertEquals('read', $o->getName());
         $this->assertEquals('read', $o->__toString());
         $this->assertEquals('read all', $o->getDescription());
-        
     }
 
     public function testHydrate()
