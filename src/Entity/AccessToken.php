@@ -38,4 +38,29 @@ namespace Platine\OAuth2\Entity;
  */
 class AccessToken extends BaseToken
 {
+    /**
+     * Create new access token
+     * @param int $ttl
+     * @param TokenOwnerInterface|null $owner
+     * @param Client|null $client
+     * @param array<string>|Scope[]|null $scopes
+     * @return self
+     */
+    public static function createNewAccessToken(
+        int $ttl,
+        ?TokenOwnerInterface $owner = null,
+        ?Client $client = null,
+        ?array $scopes = null
+    ): AccessToken {
+        return static::createNew($ttl, $owner, $client, $scopes);
+    }
+
+    /**
+     * Whether the access token is expired
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        return $this->expireAt !== null && parent::isExpired();
+    }
 }

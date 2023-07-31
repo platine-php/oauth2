@@ -78,7 +78,7 @@ abstract class BaseToken
     /**
      * Can not create object of this class directly
      */
-    private function __construct()
+    final public function __construct()
     {
     }
 
