@@ -28,141 +28,74 @@
  * SOFTWARE.
  */
 
-/**
- *  @file Configuration.php
- *
- *  The OAuth2 Configuration class
- *
- *  @package    Platine\OAuth2
- *  @author Platine Developers Team
- *  @copyright  Copyright (c) 2020
- *  @license    http://opensource.org/licenses/MIT  MIT License
- *  @link   http://www.iacademy.cf
- *  @version 1.0.0
- *  @filesource
- */
-
 declare(strict_types=1);
 
-namespace Platine\OAuth2;
+namespace Platine\OAuth2\Grant;
 
-use Platine\Stdlib\Config\AbstractConfiguration;
+use Platine\Http\ResponseInterface;
+use Platine\Http\ServerRequestInterface;
+use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\TokenOwnerInterface;
 
 /**
- * @class Configuration
- * @package Platine\OAuth2
+ * Interface that all authorization grant type should implement
+ *
+ * Please note that the grants DOES NOT authenticate the client. This is done in the authorization
+ * server. You must therefore make sure that the grants are only called from the authorization server
+ *
+ * @class GrantInterface
+ * @package Platine\OAuth2\Grant
+ * @link http://tools.ietf.org/html/rfc6749#section-1.3
  */
-class Configuration extends AbstractConfiguration
+interface GrantInterface
 {
     /**
-     * Return the access token request attribute value
+     * Need to be overwrite by each grant
+     */
+    public const GRANT_TYPE = '';
+    public const GRANT_RESPONSE_TYPE = '';
+
+    /**
+     * Create the authorization response
+     * @param ServerRequestInterface $request
+     * @param Client $client
+     * @param TokenOwnerInterface|null $owner
+     * @return ResponseInterface
+     */
+    public function createAuthorizationResponse(
+        ServerRequestInterface $request,
+        Client $client,
+        ?TokenOwnerInterface $owner = null
+    ): ResponseInterface;
+
+    /**
+     * Create the token response
+     * @param ServerRequestInterface $request
+     * @param Client|null $client
+     * @param TokenOwnerInterface|null $owner
+     * @return ResponseInterface
+     */
+    public function createTokenResponse(
+        ServerRequestInterface $request,
+        ?Client $client = null,
+        ?TokenOwnerInterface $owner = null
+    ): ResponseInterface;
+
+    /**
+     * Return the grant type
      * @return string
      */
-    public function getTokenRequestAttribute(): string
-    {
-        return $this->get('request_attribute.token');
-    }
+    public function getType(): string;
 
     /**
-     * Return the owner request attribute value
+     * Return the grant response type
      * @return string
      */
-    public function getOwnerRequestAttribute(): string
-    {
-        return $this->get('request_attribute.owner');
-    }
+    public function getResponseType(): string;
 
     /**
-     * Return the authorization code TTL value
-     * @return int
-     */
-    public function getAuthorizationCodeTtl(): int
-    {
-        return $this->get('ttl.authorization_code');
-    }
-
-    /**
-     * Return the access token TTL value
-     * @return int
-     */
-    public function getAccessTokenTtl(): int
-    {
-        return $this->get('ttl.access_token');
-    }
-
-    /**
-     * Return the refresh token TTL value
-     * @return int
-     */
-    public function getRefreshTokenTtl(): int
-    {
-        return $this->get('ttl.refresh_token');
-    }
-
-    /**
-     * Whether need rotate refresh token
+     * Whether this grant allow public clients
      * @return bool
      */
-    public function isRotateRefreshToken(): bool
-    {
-        return $this->get('rotate_refresh_token');
-    }
-
-    /**
-     * Whether need rotate refresh token after revocation
-     * @return bool
-     */
-    public function isRevokeRotatedRefreshToken(): bool
-    {
-        return $this->get('revoke_rotated_refresh_token');
-    }
-
-    /**
-     * Return the supported grants
-     * @return array<int, string>
-     */
-    public function getGrants(): array
-    {
-        return $this->get('grants');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getValidationRules(): array
-    {
-        return [
-            'request_attribute' => 'array',
-            'request_attribute.token' => 'string',
-            'request_attribute.owner' => 'string',
-            'ttl' => 'array',
-            'ttl.authorization_code' => 'integer',
-            'ttl.access_token' => 'integer',
-            'ttl.refresh_token' => 'integer',
-            'rotate_refresh_token' => 'boolean',
-            'revoke_rotated_refresh_token' => 'boolean',
-            'grants' => 'array'
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefault(): array
-    {
-        return [
-            'grants' => [],
-            'ttl' => [
-                'authorization_code' => 120,
-                'access_token' => 3600,
-                'refresh_token' => 86400,
-            ],
-            'rotate_refresh_token' => false,
-            'revoke_rotated_refresh_token' => true,
-            'request_attribute' => [
-                'token' => 'oauth_token',
-                'owner' => 'owner',
-            ],
-        ];
-    }
+    public function allowPublicClients(): bool;
 }

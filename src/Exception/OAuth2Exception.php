@@ -28,141 +28,136 @@
  * SOFTWARE.
  */
 
-/**
- *  @file Configuration.php
- *
- *  The OAuth2 Configuration class
- *
- *  @package    Platine\OAuth2
- *  @author Platine Developers Team
- *  @copyright  Copyright (c) 2020
- *  @license    http://opensource.org/licenses/MIT  MIT License
- *  @link   http://www.iacademy.cf
- *  @version 1.0.0
- *  @filesource
- */
-
 declare(strict_types=1);
 
-namespace Platine\OAuth2;
+namespace Platine\OAuth2\Exception;
 
-use Platine\Stdlib\Config\AbstractConfiguration;
+use Exception;
 
 /**
- * @class Configuration
- * @package Platine\OAuth2
+ * @class OAuth2Exception
+ * @package Platine\OAuth2\Exception
  */
-class Configuration extends AbstractConfiguration
+class OAuth2Exception extends Exception
 {
     /**
-     * Return the access token request attribute value
-     * @return string
+     * Create new instance
+     * @param string $message
+     * @param string $code
      */
-    public function getTokenRequestAttribute(): string
+    public function __construct(string $message, string $code)
     {
-        return $this->get('request_attribute.token');
+        parent::__construct($message);
+        $this->code = $code;
     }
 
     /**
-     * Return the owner request attribute value
-     * @return string
+     * Throw exception for access denied
+     * @param string $description
+     * @return self
      */
-    public function getOwnerRequestAttribute(): string
+    public static function accessDenied(string $description): self
     {
-        return $this->get('request_attribute.owner');
+        return new self($description, 'access_denied');
     }
 
     /**
-     * Return the authorization code TTL value
-     * @return int
+     * Throw exception for invalid request
+     * @param string $description
+     * @return self
      */
-    public function getAuthorizationCodeTtl(): int
+    public static function invalidRequest(string $description): self
     {
-        return $this->get('ttl.authorization_code');
+        return new self($description, 'invalid_request');
     }
 
     /**
-     * Return the access token TTL value
-     * @return int
+     * Throw exception for invalid client
+     * @param string $description
+     * @return self
      */
-    public function getAccessTokenTtl(): int
+    public static function invalidClient(string $description): self
     {
-        return $this->get('ttl.access_token');
+        return new self($description, 'invalid_client');
     }
 
     /**
-     * Return the refresh token TTL value
-     * @return int
+     * Throw exception for invalid grant
+     * @param string $description
+     * @return self
      */
-    public function getRefreshTokenTtl(): int
+    public static function invalidGrant(string $description): self
     {
-        return $this->get('ttl.refresh_token');
+        return new self($description, 'invalid_grant');
     }
 
     /**
-     * Whether need rotate refresh token
-     * @return bool
+     * Throw exception for invalid scope
+     * @param string $description
+     * @return self
      */
-    public function isRotateRefreshToken(): bool
+    public static function invalidScope(string $description): self
     {
-        return $this->get('rotate_refresh_token');
+        return new self($description, 'invalid_scope');
     }
 
     /**
-     * Whether need rotate refresh token after revocation
-     * @return bool
+     * Throw exception for server error
+     * @param string $description
+     * @return self
      */
-    public function isRevokeRotatedRefreshToken(): bool
+    public static function serverError(string $description): self
     {
-        return $this->get('revoke_rotated_refresh_token');
+        return new self($description, 'server_error');
     }
 
     /**
-     * Return the supported grants
-     * @return array<int, string>
+     * Throw exception for temporarily unavailable
+     * @param string $description
+     * @return self
      */
-    public function getGrants(): array
+    public static function temporarilyUnavailable(string $description): self
     {
-        return $this->get('grants');
+        return new self($description, 'temporarily_unavailable');
     }
 
     /**
-     * {@inheritdoc}
+     * Throw exception for unauthorized client
+     * @param string $description
+     * @return self
      */
-    public function getValidationRules(): array
+    public static function unauthorizedClient(string $description): self
     {
-        return [
-            'request_attribute' => 'array',
-            'request_attribute.token' => 'string',
-            'request_attribute.owner' => 'string',
-            'ttl' => 'array',
-            'ttl.authorization_code' => 'integer',
-            'ttl.access_token' => 'integer',
-            'ttl.refresh_token' => 'integer',
-            'rotate_refresh_token' => 'boolean',
-            'revoke_rotated_refresh_token' => 'boolean',
-            'grants' => 'array'
-        ];
+        return new self($description, 'unauthorized_client');
     }
 
     /**
-     * {@inheritdoc}
+     * Throw exception for unsupported grant type
+     * @param string $description
+     * @return self
      */
-    public function getDefault(): array
+    public static function unsupportedGrantType(string $description): self
     {
-        return [
-            'grants' => [],
-            'ttl' => [
-                'authorization_code' => 120,
-                'access_token' => 3600,
-                'refresh_token' => 86400,
-            ],
-            'rotate_refresh_token' => false,
-            'revoke_rotated_refresh_token' => true,
-            'request_attribute' => [
-                'token' => 'oauth_token',
-                'owner' => 'owner',
-            ],
-        ];
+        return new self($description, 'unsupported_grant_type');
+    }
+
+    /**
+     * Throw exception for unsupported response type
+     * @param string $description
+     * @return self
+     */
+    public static function unsupportedResponseType(string $description): self
+    {
+        return new self($description, 'unsupported_response_type');
+    }
+
+    /**
+     * Throw exception for unsupported token type
+     * @param string $description
+     * @return self
+     */
+    public static function unsupportedTokenType(string $description): self
+    {
+        return new self($description, 'unsupported_token_type');
     }
 }

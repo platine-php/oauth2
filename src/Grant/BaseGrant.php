@@ -28,141 +28,67 @@
  * SOFTWARE.
  */
 
-/**
- *  @file Configuration.php
- *
- *  The OAuth2 Configuration class
- *
- *  @package    Platine\OAuth2
- *  @author Platine Developers Team
- *  @copyright  Copyright (c) 2020
- *  @license    http://opensource.org/licenses/MIT  MIT License
- *  @link   http://www.iacademy.cf
- *  @version 1.0.0
- *  @filesource
- */
-
 declare(strict_types=1);
 
-namespace Platine\OAuth2;
+namespace Platine\OAuth2\Grant;
 
-use Platine\Stdlib\Config\AbstractConfiguration;
+use Platine\Http\ResponseInterface;
+use Platine\OAuth2\Entity\AccessToken;
+use Platine\OAuth2\Entity\RefreshToken;
+use Platine\OAuth2\Response\JsonResponse;
 
 /**
- * @class Configuration
- * @package Platine\OAuth2
+ * @class BaseGrant
+ * @package Platine\OAuth2\Grant
  */
-class Configuration extends AbstractConfiguration
+abstract class BaseGrant implements GrantInterface
 {
     /**
-     * Return the access token request attribute value
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTokenRequestAttribute(): string
+    public function getType(): string
     {
-        return $this->get('request_attribute.token');
-    }
-
-    /**
-     * Return the owner request attribute value
-     * @return string
-     */
-    public function getOwnerRequestAttribute(): string
-    {
-        return $this->get('request_attribute.owner');
-    }
-
-    /**
-     * Return the authorization code TTL value
-     * @return int
-     */
-    public function getAuthorizationCodeTtl(): int
-    {
-        return $this->get('ttl.authorization_code');
-    }
-
-    /**
-     * Return the access token TTL value
-     * @return int
-     */
-    public function getAccessTokenTtl(): int
-    {
-        return $this->get('ttl.access_token');
-    }
-
-    /**
-     * Return the refresh token TTL value
-     * @return int
-     */
-    public function getRefreshTokenTtl(): int
-    {
-        return $this->get('ttl.refresh_token');
-    }
-
-    /**
-     * Whether need rotate refresh token
-     * @return bool
-     */
-    public function isRotateRefreshToken(): bool
-    {
-        return $this->get('rotate_refresh_token');
-    }
-
-    /**
-     * Whether need rotate refresh token after revocation
-     * @return bool
-     */
-    public function isRevokeRotatedRefreshToken(): bool
-    {
-        return $this->get('revoke_rotated_refresh_token');
-    }
-
-    /**
-     * Return the supported grants
-     * @return array<int, string>
-     */
-    public function getGrants(): array
-    {
-        return $this->get('grants');
+        return self::GRANT_TYPE;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getValidationRules(): array
+    public function getResponseType(): string
     {
-        return [
-            'request_attribute' => 'array',
-            'request_attribute.token' => 'string',
-            'request_attribute.owner' => 'string',
-            'ttl' => 'array',
-            'ttl.authorization_code' => 'integer',
-            'ttl.access_token' => 'integer',
-            'ttl.refresh_token' => 'integer',
-            'rotate_refresh_token' => 'boolean',
-            'revoke_rotated_refresh_token' => 'boolean',
-            'grants' => 'array'
-        ];
+        return self::GRANT_RESPONSE_TYPE;
     }
 
     /**
-     * {@inheritdoc}
+     * Generate the token response
+     * @param AccessToken $accessToken
+     * @param RefreshToken|null $refreshToken
+     * @param bool $useRefreshTokenScopes
+     * @return ResponseInterface
      */
-    public function getDefault(): array
-    {
-        return [
-            'grants' => [],
-            'ttl' => [
-                'authorization_code' => 120,
-                'access_token' => 3600,
-                'refresh_token' => 86400,
-            ],
-            'rotate_refresh_token' => false,
-            'revoke_rotated_refresh_token' => true,
-            'request_attribute' => [
-                'token' => 'oauth_token',
-                'owner' => 'owner',
-            ],
+    protected function generateTokenResponse(
+        AccessToken $accessToken,
+        ?RefreshToken $refreshToken = null,
+        bool $useRefreshTokenScopes = false
+    ): ResponseInterface {
+        $owner = $accessToken->getOwner();
+        if ($useRefreshTokenScopes && $refreshToken !== null) {
+            $scopes = $refreshToken->getScopes();
+        } else {
+            $scopes = $accessToken->getScopes();
+        }
+
+        $body = [
+            'access_token' => $accessToken->getToken(),
+            'token_type' => 'Bearer',
+            'expires_in' => $accessToken->getExpiresIn(),
+            'scope' => implode(' ', $scopes),
+            'owner_id' => $owner !== null ? $owner->getOwnerId() : null,
         ];
+        if ($refreshToken !== null) {
+            $body['refresh_token'] = $refreshToken->getToken();
+        }
+
+        return new JsonResponse(array_filter($body));
     }
 }

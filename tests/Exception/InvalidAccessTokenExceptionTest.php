@@ -2,58 +2,34 @@
 
 declare(strict_types=1);
 
-namespace Platine\OAuth2\Test;
+namespace Platine\OAuth2\Test\Exception;
 
-use InvalidArgumentException;
 use Platine\Dev\PlatineTestCase;
-use Platine\OAuth2\Configuration;
+use Platine\OAuth2\Exception\InvalidAccessTokenException;
 
 /**
- * Configuration class tests
+ * InvalidAccessTokenException class tests
  *
  * @group core
  * @group oauth2
  */
-class ConfigurationTest extends PlatineTestCase
+class InvalidAccessTokenExceptionTest extends PlatineTestCase
 {
     public function testConstructor()
     {
-        $cfg = new Configuration([]);
-        $this->assertInstanceOf(Configuration::class, $cfg);
+        $o = new InvalidAccessTokenException('foo', 'bar');
+        $this->assertInstanceOf(InvalidAccessTokenException::class, $o);
+
+        $this->assertEquals('foo', $o->getMessage());
+        $this->assertEquals('bar', $o->getCode());
     }
 
-    public function testGetNotFound()
+    public function testInvalidToken()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $cfg = new Configuration([]);
-        $cfg->get('not_found_config');
-    }
+        $o = InvalidAccessTokenException::invalidToken('error description');
+        $this->assertInstanceOf(InvalidAccessTokenException::class, $o);
 
-    public function testGetDefaultValuesSuccess()
-    {
-        $cfg = new Configuration([]);
-        $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
-        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
-        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
-        $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
-        $this->assertEquals(3600, $cfg->getAccessTokenTtl());
-        $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
-        $this->assertFalse($cfg->isRotateRefreshToken());
-        $this->assertTrue($cfg->isRevokeRotatedRefreshToken());
-        $this->assertCount(0, $cfg->getGrants());
-    }
-
-    public function testGetValuesSuccess()
-    {
-        $cfg = new Configuration(['grants' => ['foo', 'bar'], 'rotate_refresh_token' => true]);
-        $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
-        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
-        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
-        $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
-        $this->assertEquals(3600, $cfg->getAccessTokenTtl());
-        $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
-        $this->assertTrue($cfg->isRotateRefreshToken());
-        $this->assertTrue($cfg->isRevokeRotatedRefreshToken());
-        $this->assertCount(2, $cfg->getGrants());
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('invalid_token', $o->getCode());
     }
 }

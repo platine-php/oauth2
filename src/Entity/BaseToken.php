@@ -28,141 +28,210 @@
  * SOFTWARE.
  */
 
-/**
- *  @file Configuration.php
- *
- *  The OAuth2 Configuration class
- *
- *  @package    Platine\OAuth2
- *  @author Platine Developers Team
- *  @copyright  Copyright (c) 2020
- *  @license    http://opensource.org/licenses/MIT  MIT License
- *  @link   http://www.iacademy.cf
- *  @version 1.0.0
- *  @filesource
- */
-
 declare(strict_types=1);
 
-namespace Platine\OAuth2;
+namespace Platine\OAuth2\Entity;
 
-use Platine\Stdlib\Config\AbstractConfiguration;
+use DateTime;
+use DateTimeInterface;
 
 /**
- * @class Configuration
- * @package Platine\OAuth2
+ * Provide basic functionality for both access tokens, refresh tokens and authorization codes
+ * Please note that scopes are stored as a string instead using
+ * associations to scope entities, mainly for performance reasons and to avoid useless database calls.
+ *
+ * @class BaseToken
+ * @package Platine\OAuth2\Entity
  */
-class Configuration extends AbstractConfiguration
+abstract class BaseToken
 {
     /**
-     * Return the access token request attribute value
+     * The token value
+     * @var string
+     */
+    protected string $token;
+
+    /**
+     * The client to use
+     * @var Client|null
+     */
+    protected ?Client $client = null;
+
+    /**
+     * The token owner
+     * @var TokenOwnerInterface|null
+     */
+    protected ?TokenOwnerInterface $owner = null;
+
+    /**
+     * The token expires at
+     * @var DateTimeInterface|null
+     */
+    protected ?DateTimeInterface $expireAt = null;
+
+    /**
+     * The scopes associated with the token
+     * @var array<string>
+     */
+    protected array $scopes = [];
+
+    /**
+     * Can not create object of this class directly
+     */
+    private function __construct()
+    {
+    }
+
+    /**
+     * Create token using given data
+     * @param array<string, mixed> $data
+     * @return self
+     */
+    public static function hydrate(array $data): self
+    {
+        $token = new static();
+        $token->token = $data['token'];
+        $token->owner = $data['owner'];
+        $token->client = $data['client'];
+        $token->scopes = (array) $data['scopes'];
+        $token->expireAt = $data['expires_at'];
+
+        return $token;
+    }
+
+    /**
+     * Return the token owner
+     * @return TokenOwnerInterface|null
+     */
+    public function getOwner(): ?TokenOwnerInterface
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Return the client
+     * @return Client|null
+     */
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    /**
+     * Return the token value
      * @return string
      */
-    public function getTokenRequestAttribute(): string
+    public function getToken(): string
     {
-        return $this->get('request_attribute.token');
+        return $this->token;
     }
 
     /**
-     * Return the owner request attribute value
-     * @return string
+     * Return the expires at
+     * @return DateTimeInterface|null
      */
-    public function getOwnerRequestAttribute(): string
+    public function getExpireAt(): ?DateTimeInterface
     {
-        return $this->get('request_attribute.owner');
+        return $this->expireAt ? clone $this->expireAt : null;
     }
 
+
     /**
-     * Return the authorization code TTL value
+     * Return the token expires in (seconds)
+     * (if expired, will return a negative value)
      * @return int
      */
-    public function getAuthorizationCodeTtl(): int
+    public function getExpiresIn(): int
     {
-        return $this->get('ttl.authorization_code');
+        if ($this->expireAt === null) {
+            return 0;
+        }
+
+        return $this->expireAt->getTimestamp() - (new DateTime())->getTimestamp();
     }
 
     /**
-     * Return the access token TTL value
-     * @return int
-     */
-    public function getAccessTokenTtl(): int
-    {
-        return $this->get('ttl.access_token');
-    }
-
-    /**
-     * Return the refresh token TTL value
-     * @return int
-     */
-    public function getRefreshTokenTtl(): int
-    {
-        return $this->get('ttl.refresh_token');
-    }
-
-    /**
-     * Whether need rotate refresh token
+     * Whether the token is expired
      * @return bool
      */
-    public function isRotateRefreshToken(): bool
+    public function isExpired(): bool
     {
-        return $this->get('rotate_refresh_token');
+        if ($this->expireAt === null) {
+            return true;
+        }
+
+        return $this->expireAt->getTimestamp() <= (new DateTime())->getTimestamp();
     }
 
     /**
-     * Whether need rotate refresh token after revocation
+     * Return the scopes
+     *
+     * @return array<string>
+     */
+    public function getScopes(): array
+    {
+        return $this->scopes;
+    }
+
+    /**
+     * Match the scopes of the token with the one provided in the parameter
+     * @param string|array<string> $scopes
      * @return bool
      */
-    public function isRevokeRotatedRefreshToken(): bool
+    public function matchScopes($scopes): bool
     {
-        return $this->get('revoke_rotated_refresh_token');
+        if (is_string($scopes)) {
+            $scopes = explode(' ', $scopes);
+        }
+        $diff = array_diff($scopes, $this->scopes);
+
+        return count($diff) === 0;
     }
 
     /**
-     * Return the supported grants
-     * @return array<int, string>
+     * Check if the token is valid, according to the
+     * given scope(s) and expiration dates
+     * @param string|array<string> $scopes
+     * @return bool
      */
-    public function getGrants(): array
+    public function isValid($scopes): bool
     {
-        return $this->get('grants');
+        if ($this->isExpired()) {
+            return false;
+        }
+
+        if (!empty($scopes) && $this->matchScopes($scopes) === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * {@inheritdoc}
+     * Create new token
+     * @param int $ttl
+     * @param TokenOwnerInterface|null $owner
+     * @param Client|null $client
+     * @param array<string>|Scope[]|null $scopes
+     * @return self
      */
-    public function getValidationRules(): array
-    {
-        return [
-            'request_attribute' => 'array',
-            'request_attribute.token' => 'string',
-            'request_attribute.owner' => 'string',
-            'ttl' => 'array',
-            'ttl.authorization_code' => 'integer',
-            'ttl.access_token' => 'integer',
-            'ttl.refresh_token' => 'integer',
-            'rotate_refresh_token' => 'boolean',
-            'revoke_rotated_refresh_token' => 'boolean',
-            'grants' => 'array'
-        ];
-    }
+    protected static function createNew(
+        int $ttl,
+        ?TokenOwnerInterface $owner = null,
+        ?Client $client = null,
+        ?array $scopes = null
+    ): self {
+        if (is_array($scopes)) {
+            $scopes = array_map(fn($scope) => (string) $scope, $scopes);
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefault(): array
-    {
-        return [
-            'grants' => [],
-            'ttl' => [
-                'authorization_code' => 120,
-                'access_token' => 3600,
-                'refresh_token' => 86400,
-            ],
-            'rotate_refresh_token' => false,
-            'revoke_rotated_refresh_token' => true,
-            'request_attribute' => [
-                'token' => 'oauth_token',
-                'owner' => 'owner',
-            ],
-        ];
+        $token = new static();
+        $token->token = bin2hex(random_bytes(20));
+        $token->owner = $owner;
+        $token->client = $client;
+        $token->scopes = $scopes ?? [];
+        $token->expireAt = $ttl ? (new DateTime())->modify(sprintf('+%d seconds', $ttl)) : null;
+
+        return $token;
     }
 }

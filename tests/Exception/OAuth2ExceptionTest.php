@@ -2,58 +2,125 @@
 
 declare(strict_types=1);
 
-namespace Platine\OAuth2\Test;
+namespace Platine\OAuth2\Test\Exception;
 
-use InvalidArgumentException;
 use Platine\Dev\PlatineTestCase;
-use Platine\OAuth2\Configuration;
+use Platine\OAuth2\Exception\InvalidAccessTokenException;
+use Platine\OAuth2\Exception\OAuth2Exception;
 
 /**
- * Configuration class tests
+ * OAuth2Exception class tests
  *
  * @group core
  * @group oauth2
  */
-class ConfigurationTest extends PlatineTestCase
+class OAuth2ExceptionTest extends PlatineTestCase
 {
     public function testConstructor()
     {
-        $cfg = new Configuration([]);
-        $this->assertInstanceOf(Configuration::class, $cfg);
+        $o = new OAuth2Exception('foo', 'bar');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('foo', $o->getMessage());
+        $this->assertEquals('bar', $o->getCode());
     }
 
-    public function testGetNotFound()
+    public function testAccessDenied()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $cfg = new Configuration([]);
-        $cfg->get('not_found_config');
+        $o = OAuth2Exception::accessDenied('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('access_denied', $o->getCode());
     }
 
-    public function testGetDefaultValuesSuccess()
+    public function testInvalidRequest()
     {
-        $cfg = new Configuration([]);
-        $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
-        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
-        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
-        $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
-        $this->assertEquals(3600, $cfg->getAccessTokenTtl());
-        $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
-        $this->assertFalse($cfg->isRotateRefreshToken());
-        $this->assertTrue($cfg->isRevokeRotatedRefreshToken());
-        $this->assertCount(0, $cfg->getGrants());
+        $o = OAuth2Exception::invalidRequest('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('invalid_request', $o->getCode());
     }
 
-    public function testGetValuesSuccess()
+    public function testInvalidClient()
     {
-        $cfg = new Configuration(['grants' => ['foo', 'bar'], 'rotate_refresh_token' => true]);
-        $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
-        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
-        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
-        $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
-        $this->assertEquals(3600, $cfg->getAccessTokenTtl());
-        $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
-        $this->assertTrue($cfg->isRotateRefreshToken());
-        $this->assertTrue($cfg->isRevokeRotatedRefreshToken());
-        $this->assertCount(2, $cfg->getGrants());
+        $o = OAuth2Exception::invalidClient('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('invalid_client', $o->getCode());
+    }
+
+    public function testInvalidGrant()
+    {
+        $o = OAuth2Exception::invalidGrant('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('invalid_grant', $o->getCode());
+    }
+
+    public function testInvalidScope()
+    {
+        $o = OAuth2Exception::invalidScope('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('invalid_scope', $o->getCode());
+    }
+
+    public function testServerError()
+    {
+        $o = OAuth2Exception::serverError('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('server_error', $o->getCode());
+    }
+
+    public function testTemporarilyUnavailable()
+    {
+        $o = OAuth2Exception::temporarilyUnavailable('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('temporarily_unavailable', $o->getCode());
+    }
+
+    public function testUnauthorizedClient()
+    {
+        $o = OAuth2Exception::unauthorizedClient('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('unauthorized_client', $o->getCode());
+    }
+
+    public function testUnsupportedGrantType()
+    {
+        $o = OAuth2Exception::unsupportedGrantType('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('unsupported_grant_type', $o->getCode());
+    }
+
+    public function testUnsupportedResponseType()
+    {
+        $o = OAuth2Exception::unsupportedResponseType('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('unsupported_response_type', $o->getCode());
+    }
+
+    public function testUnsupportedTokenType()
+    {
+        $o = OAuth2Exception::unsupportedTokenType('error description');
+        $this->assertInstanceOf(OAuth2Exception::class, $o);
+
+        $this->assertEquals('error description', $o->getMessage());
+        $this->assertEquals('unsupported_token_type', $o->getCode());
     }
 }
