@@ -76,7 +76,7 @@ abstract class BaseToken
     protected array $scopes = [];
 
     /**
-     * Can not create object of this class directly
+     * Can not rewrite the constructor in child classes
      */
     final public function __construct()
     {

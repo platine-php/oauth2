@@ -36,6 +36,54 @@ namespace Platine\OAuth2\Entity;
  * @class AuthorizationCode
  * @package Platine\OAuth2\Entity
  */
-class AuthorizationCode
+class AuthorizationCode extends BaseToken
 {
+    /**
+     * The redirect URI
+     * @var string
+     */
+    protected string $redirectUri;
+
+    /**
+     * Create new authorization code
+     * @param int $ttl
+     * @param string|null $redirectUri
+     * @param TokenOwnerInterface|null $owner
+     * @param Client|null $client
+     * @param array<string>|Scope[]|null $scopes
+     * @return $this
+     */
+    public static function createNewAuthorizationCode(
+        int $ttl,
+        ?string $redirectUri = null,
+        ?TokenOwnerInterface $owner = null,
+        ?Client $client = null,
+        ?array $scopes = null
+    ): self {
+        $code = static::createNew($ttl, $owner, $client, $scopes);
+
+        $code->redirectUri = $redirectUri ?? '';
+
+        return $code;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function hydrate(array $data): self
+    {
+        $code = parent::hydrate($data);
+        $code->redirectUri = $data['redirect_uri'];
+
+        return $code;
+    }
+
+    /**
+     * Return the redirect URI
+     * @return string
+     */
+    public function getRedirectUri(): string
+    {
+        return $this->redirectUri;
+    }
 }

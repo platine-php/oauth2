@@ -38,4 +38,29 @@ namespace Platine\OAuth2\Entity;
  */
 class RefreshToken extends BaseToken
 {
+    /**
+     * Create new refresh token
+     * @param int $ttl
+     * @param TokenOwnerInterface|null $owner
+     * @param Client|null $client
+     * @param array<string>|Scope[]|null $scopes
+     * @return $this
+     */
+    public static function createNewRefreshToken(
+        int $ttl,
+        ?TokenOwnerInterface $owner = null,
+        ?Client $client = null,
+        ?array $scopes = null
+    ): self {
+        return static::createNew($ttl, $owner, $client, $scopes);
+    }
+
+    /**
+     * Whether the refresh token is expired
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        return $this->expireAt !== null && parent::isExpired();
+    }
 }

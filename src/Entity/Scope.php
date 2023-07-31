@@ -39,10 +39,111 @@ namespace Platine\OAuth2\Entity;
 class Scope
 {
     /**
+     * The scope id
+     * @var int
+     */
+    protected int $id;
+
+    /**
      * The scope name
      * @var string
      */
     protected string $name;
+
+    /**
+     * The scope description
+     * @var string|null
+     */
+    protected ?string $description = null;
+
+    /**
+     * Whether is the default scope
+     * @var bool
+     */
+    protected bool $isDefault = false;
+
+    /**
+     * Can not rewrite the constructor in child classes
+     */
+    final public function __construct()
+    {
+    }
+
+    /**
+     * Create new scope
+     * @param int $id
+     * @param string $name
+     * @param string|null $description
+     * @param bool $isDefault
+     * @return self
+     */
+    public static function createNewScope(
+        int $id,
+        string $name,
+        ?string $description = null,
+        bool $isDefault = false
+    ): self {
+        $scope = new static();
+        $scope->id = $id;
+        $scope->name = $name;
+        $scope->description = $description;
+        $scope->isDefault = $isDefault;
+
+        return $scope;
+    }
+
+    /**
+     * Create scope using given data
+     * @param array<string, mixed> $data
+     * @return self
+     */
+    public static function hydrate(array $data): self
+    {
+        $scope = new static();
+        $scope->id = $data['id'];
+        $scope->name = $data['name'];
+        $scope->description = $data['description'];
+        $scope->isDefault = $data['is_default'];
+
+        return $scope;
+    }
+
+    /**
+     * Return the id
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Return the name
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Return the description
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * Whether is the default scope
+     * @return bool
+     */
+    public function isDefault(): bool
+    {
+        return $this->isDefault;
+    }
+
 
     /**
      *

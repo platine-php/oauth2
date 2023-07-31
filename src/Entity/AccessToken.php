@@ -44,14 +44,14 @@ class AccessToken extends BaseToken
      * @param TokenOwnerInterface|null $owner
      * @param Client|null $client
      * @param array<string>|Scope[]|null $scopes
-     * @return self
+     * @return $this
      */
     public static function createNewAccessToken(
         int $ttl,
         ?TokenOwnerInterface $owner = null,
         ?Client $client = null,
         ?array $scopes = null
-    ): AccessToken {
+    ): self {
         return static::createNew($ttl, $owner, $client, $scopes);
     }
 
