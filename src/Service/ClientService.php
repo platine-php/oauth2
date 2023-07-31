@@ -32,10 +32,63 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2\Service;
 
+use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Repository\ClientRepositoryInterface;
+
 /**
  * @class ClientService
  * @package Platine\OAuth2\Service
  */
 class ClientService
 {
+    /**
+     * The ClientRepositoryInterface instance
+     * @var ClientRepositoryInterface
+     */
+    protected ClientRepositoryInterface $clientRepository;
+
+    /**
+     * Create new instance
+     * @param ClientRepositoryInterface $clientRepository
+     */
+    public function __construct(ClientRepositoryInterface $clientRepository)
+    {
+        $this->clientRepository = $clientRepository;
+    }
+
+    /**
+     * Create new client
+     * @param string $name
+     * @param array<string> $redirectUris
+     * @param array<string> $scopes
+     * @return array<int, Client|string>
+     */
+    public function create(
+        string $name,
+        array $redirectUris,
+        array $scopes = []
+    ): array {
+        do {
+            $client = Client::createNewClient(
+                $name,
+                $redirectUris,
+                $scopes
+            );
+        } while ($this->clientRepository->clientIdExists($client->getId()));
+
+        $secret = $client->generateSecret();
+        $this->clientRepository->save($client);
+
+        return [$client, $secret];
+    }
+
+    /**
+     * Return the client based on the id
+     * @param string $id
+     * @return Client|null
+     */
+    public function find(string $id): ?Client
+    {
+        return $this->clientRepository->find($id);
+    }
 }

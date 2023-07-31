@@ -32,10 +32,67 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2\Service;
 
+use Platine\OAuth2\Configuration;
+use Platine\OAuth2\Entity\AuthorizationCode;
+use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\TokenOwnerInterface;
+use Platine\OAuth2\Repository\AuthorizationCodeRepositoryInterface;
+
 /**
  * @class AuthorizationCodeService
  * @package Platine\OAuth2\Service
  */
 class AuthorizationCodeService extends BaseTokenService
 {
+    /**
+     * The AuthorizationCodeRepositoryInterface instance
+     * @var AuthorizationCodeRepositoryInterface
+     */
+    protected $tokenRepository;
+
+    /**
+     * Create new instance
+     * @param AuthorizationCodeRepositoryInterface $tokenRepository
+     * @param ScopeService $scopeService
+     * @param Configuration $configuration
+     */
+    public function __construct(
+        AuthorizationCodeRepositoryInterface $tokenRepository,
+        ScopeService $scopeService,
+        Configuration $configuration
+    ) {
+        parent::__construct($tokenRepository, $scopeService, $configuration);
+    }
+
+    /**
+     * Create new authorization code
+     * @param string $redirectUri
+     * @param TokenOwnerInterface $owner
+     * @param Client $client
+     * @param array<string>|array<Scope> $scopes
+     * @return AuthorizationCode
+     */
+    public function createToken(
+        string $redirectUri,
+        TokenOwnerInterface $owner,
+        Client $client,
+        array $scopes = []
+    ): AuthorizationCode {
+        if (count($scopes) === 0) {
+            $scopes = $this->scopeService->defaults();
+        }
+
+        $this->validateTokenScopes($scopes, $client);
+        do {
+            $token = AuthorizationCode::createNewAuthorizationCode(
+                $this->configuration->getAuthorizationCodeTtl(),
+                $redirectUri,
+                $owner,
+                $client,
+                $scopes
+            );
+        } while ($this->tokenRepository->exists($token->getToken()));
+
+        return $this->tokenRepository->save($token);
+    }
 }

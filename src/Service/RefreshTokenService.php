@@ -32,10 +32,64 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2\Service;
 
+use Platine\OAuth2\Configuration;
+use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\RefreshToken;
+use Platine\OAuth2\Entity\TokenOwnerInterface;
+use Platine\OAuth2\Repository\RefreshTokenRepositoryInterface;
+
 /**
  * @class RefreshTokenService
  * @package Platine\OAuth2\Service
  */
 class RefreshTokenService extends BaseTokenService
 {
+    /**
+     * The RefreshTokenRepositoryInterface instance
+     * @var RefreshTokenRepositoryInterface
+     */
+    protected $tokenRepository;
+
+    /**
+     * Create new instance
+     * @param RefreshTokenRepositoryInterface $tokenRepository
+     * @param ScopeService $scopeService
+     * @param Configuration $configuration
+     */
+    public function __construct(
+        RefreshTokenRepositoryInterface $tokenRepository,
+        ScopeService $scopeService,
+        Configuration $configuration
+    ) {
+        parent::__construct($tokenRepository, $scopeService, $configuration);
+    }
+
+    /**
+     * Create new refresh token
+     * @param TokenOwnerInterface $owner
+     * @param Client|null $client
+     * @param array<string>|array<Scope> $scopes
+     * @return RefreshToken
+     */
+    public function createToken(
+        TokenOwnerInterface $owner,
+        ?Client $client = null,
+        array $scopes = []
+    ): RefreshToken {
+        if (count($scopes) === 0) {
+            $scopes = $this->scopeService->defaults();
+        }
+
+        $this->validateTokenScopes($scopes, $client);
+        do {
+            $token = RefreshToken::createNewRefreshToken(
+                $this->configuration->getRefreshTokenTtl(),
+                $owner,
+                $client,
+                $scopes
+            );
+        } while ($this->tokenRepository->exists($token->getToken()));
+
+        return $this->tokenRepository->save($token);
+    }
 }

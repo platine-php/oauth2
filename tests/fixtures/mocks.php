@@ -17,6 +17,7 @@ function bin2hex(string $str)
 }
 
 
+
 namespace Platine\Stdlib\Helper;
 $mock_random_int = false;
 
