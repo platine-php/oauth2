@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2\Test\Entity;
 
-use DateTimeInterface;
 use Platine\Dev\PlatineTestCase;
-use Platine\OAuth2\Entity\AccessToken;
 use Platine\OAuth2\Entity\Client;
+use RuntimeException;
 
 /**
  * Client class tests
@@ -71,5 +70,20 @@ class ClientTest extends PlatineTestCase
         $this->assertEquals('token_bin2hex', $o->generateSecret());
         $this->assertTrue($o->authenticate('token_bin2hex'));
         $this->assertFalse($o->authenticate('token_bin2hexxx'));
+    }
+
+    public function testGenerateSecretError()
+    {
+        global $mock_random_int, $mock_password_hash_to_false;
+
+        $mock_random_int = true;
+        $mock_password_hash_to_false = true;
+
+        $o = Client::createNewClient('Platine App', 'http://localhost', ['read']);
+        $this->assertInstanceOf(Client::class, $o);
+
+        $this->assertTrue($o->isPublic());
+        $this->expectException(RuntimeException::class);
+        $o->generateSecret();
     }
 }

@@ -35,6 +35,7 @@ namespace Platine\OAuth2\Service;
 use Platine\OAuth2\Configuration;
 use Platine\OAuth2\Entity\BaseToken;
 use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\Scope;
 use Platine\OAuth2\Exception\OAuth2Exception;
 use Platine\OAuth2\Repository\TokenRepositoryInterface;
 
@@ -117,7 +118,7 @@ class BaseTokenService
 
     /**
      *
-     * @param array<string>|array<Scope> $scopes
+     * @param array<string>|Scope[] $scopes
      * @param Client|null $client
      * @return void
      */

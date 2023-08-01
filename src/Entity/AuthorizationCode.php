@@ -51,7 +51,7 @@ class AuthorizationCode extends BaseToken
      * @param TokenOwnerInterface|null $owner
      * @param Client|null $client
      * @param array<string>|Scope[]|null $scopes
-     * @return $this
+     * @return self
      */
     public static function createNewAuthorizationCode(
         int $ttl,
@@ -60,6 +60,7 @@ class AuthorizationCode extends BaseToken
         ?Client $client = null,
         ?array $scopes = null
     ): self {
+        /** @var AuthorizationCode $code */
         $code = static::createNew($ttl, $owner, $client, $scopes);
 
         $code->redirectUri = $redirectUri ?? '';
@@ -72,6 +73,7 @@ class AuthorizationCode extends BaseToken
      */
     public static function hydrate(array $data): self
     {
+        /** @var AuthorizationCode $code */
         $code = parent::hydrate($data);
         $code->redirectUri = $data['redirect_uri'];
 

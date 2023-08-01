@@ -36,6 +36,7 @@ use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequestInterface;
 use Platine\OAuth2\Configuration;
 use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\RefreshToken;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Exception\OAuth2Exception;
 use Platine\OAuth2\Service\AccessTokenService;
@@ -103,13 +104,14 @@ class RefreshTokenGrant extends BaseGrant
         ?Client $client = null,
         ?TokenOwnerInterface $owner = null
     ): ResponseInterface {
-        $postParams = $request->getParsedBody();
+        $postParams = (array) $request->getParsedBody();
         $refreshTokenValue = $postParams['refresh_token'] ?? null;
         if ($refreshTokenValue === null) {
             throw OAuth2Exception::invalidRequest('Refresh token is missin in request');
         }
 
         // We can fetch the actual token, and validate it
+        /** @var RefreshToken|null $refreshToken */
         $refreshToken = $this->refreshTokenService->getToken((string) $refreshTokenValue);
         if ($refreshToken === null || $refreshToken->isExpired()) {
             throw OAuth2Exception::invalidGrant('Refresh token is expired');
@@ -134,6 +136,7 @@ class RefreshTokenGrant extends BaseGrant
                 $this->refreshTokenService->delete($refreshToken);
             }
 
+            /** @var RefreshToken $refreshToken */
             $refreshToken = $this->refreshTokenService->createToken($refreshTokenOwner, $client, $scopes);
         }
 

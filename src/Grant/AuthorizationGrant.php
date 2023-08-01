@@ -149,7 +149,7 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
         ?Client $client = null,
         ?TokenOwnerInterface $owner = null
     ): ResponseInterface {
-        $postParams = $request->getParsedBody();
+        $postParams = (array) $request->getParsedBody();
         $code = $postParams['code'] ?? null;
 
         if ($code === null) {
@@ -162,7 +162,7 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
         }
 
         $clientId = $postParams['client_id'] ?? null;
-        if ($authorizationCode->getClient()->getId() !== $clientId) {
+        if ($authorizationCode->getClient() !== null && $authorizationCode->getClient()->getId() !== $clientId) {
             throw OAuth2Exception::invalidRequest(
                 'Authorization code\'s client does not match with the one that created the authorization code'
             );

@@ -35,6 +35,7 @@ namespace Platine\OAuth2\Service;
 use Platine\OAuth2\Configuration;
 use Platine\OAuth2\Entity\Client;
 use Platine\OAuth2\Entity\RefreshToken;
+use Platine\OAuth2\Entity\Scope;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Repository\RefreshTokenRepositoryInterface;
 
@@ -66,13 +67,13 @@ class RefreshTokenService extends BaseTokenService
 
     /**
      * Create new refresh token
-     * @param TokenOwnerInterface $owner
+     * @param TokenOwnerInterface|null $owner
      * @param Client|null $client
-     * @param array<string>|array<Scope> $scopes
+     * @param array<string>|Scope[] $scopes
      * @return RefreshToken
      */
     public function createToken(
-        TokenOwnerInterface $owner,
+        ?TokenOwnerInterface $owner = null,
         ?Client $client = null,
         array $scopes = []
     ): RefreshToken {

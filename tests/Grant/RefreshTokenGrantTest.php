@@ -7,17 +7,13 @@ namespace Platine\OAuth2\Test\Grant;
 use Platine\Dev\PlatineTestCase;
 use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequest;
-use Platine\OAuth2\AuthorizationServerInterface;
 use Platine\OAuth2\Configuration;
-use Platine\OAuth2\Entity\AuthorizationCode;
 use Platine\OAuth2\Entity\Client;
 use Platine\OAuth2\Entity\RefreshToken;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Exception\OAuth2Exception;
-use Platine\OAuth2\Grant\AuthorizationGrant;
 use Platine\OAuth2\Grant\RefreshTokenGrant;
 use Platine\OAuth2\Service\AccessTokenService;
-use Platine\OAuth2\Service\AuthorizationCodeService;
 use Platine\OAuth2\Service\RefreshTokenService;
 
 /**

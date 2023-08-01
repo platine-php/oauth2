@@ -35,6 +35,7 @@ namespace Platine\OAuth2\Service;
 use Platine\OAuth2\Configuration;
 use Platine\OAuth2\Entity\AuthorizationCode;
 use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\Scope;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Repository\AuthorizationCodeRepositoryInterface;
 
@@ -67,15 +68,15 @@ class AuthorizationCodeService extends BaseTokenService
     /**
      * Create new authorization code
      * @param string $redirectUri
-     * @param TokenOwnerInterface $owner
-     * @param Client $client
-     * @param array<string>|array<Scope> $scopes
+     * @param TokenOwnerInterface|null $owner
+     * @param Client|null $client
+     * @param array<string>|Scope[] $scopes
      * @return AuthorizationCode
      */
     public function createToken(
         string $redirectUri,
-        TokenOwnerInterface $owner,
-        Client $client,
+        ?TokenOwnerInterface $owner = null,
+        ?Client $client = null,
         array $scopes = []
     ): AuthorizationCode {
         if (count($scopes) === 0) {

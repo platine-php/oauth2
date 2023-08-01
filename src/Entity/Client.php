@@ -33,6 +33,7 @@ declare(strict_types=1);
 namespace Platine\OAuth2\Entity;
 
 use Platine\Stdlib\Helper\Str;
+use RuntimeException;
 
 /**
  * @class Client
@@ -89,7 +90,7 @@ class Client
         $redirectUris = null,
         ?array $scopes = null
     ): self {
-        if ($redirectUris !== null && is_string($redirectUris)) {
+        if (is_string($redirectUris)) {
             $redirectUris = explode(' ', $redirectUris);
         }
 
@@ -205,7 +206,11 @@ class Client
     public function generateSecret(): string
     {
         $secret = bin2hex(random_bytes(20));
-        $this->secret = password_hash($secret, PASSWORD_DEFAULT);
+        $secretHash = password_hash($secret, PASSWORD_DEFAULT);
+        if ($secretHash === false) {
+            throw new RuntimeException('Can not hash secret');
+        }
+        $this->secret = $secretHash;
 
         return $secret;
     }

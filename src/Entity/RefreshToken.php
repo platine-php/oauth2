@@ -44,7 +44,7 @@ class RefreshToken extends BaseToken
      * @param TokenOwnerInterface|null $owner
      * @param Client|null $client
      * @param array<string>|Scope[]|null $scopes
-     * @return $this
+     * @return self
      */
     public static function createNewRefreshToken(
         int $ttl,
@@ -52,7 +52,9 @@ class RefreshToken extends BaseToken
         ?Client $client = null,
         ?array $scopes = null
     ): self {
-        return static::createNew($ttl, $owner, $client, $scopes);
+        /** @var RefreshToken $token */
+        $token = static::createNew($ttl, $owner, $client, $scopes);
+        return $token;
     }
 
     /**

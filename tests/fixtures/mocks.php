@@ -5,6 +5,17 @@ declare(strict_types=1);
 namespace Platine\OAuth2\Entity;
 
 $mock_bin2hex = false;
+$mock_password_hash_to_false = false;
+
+function password_hash(string $str, $algo)
+{
+    global $mock_password_hash_to_false;
+    if ($mock_password_hash_to_false) {
+        return false;
+    } else {
+        return \password_hash($str, $algo);
+    }
+}
 
 function bin2hex(string $str)
 {
@@ -15,7 +26,6 @@ function bin2hex(string $str)
         return \bin2hex($str);
     }
 }
-
 
 
 namespace Platine\Stdlib\Helper;

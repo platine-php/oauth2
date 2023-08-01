@@ -35,6 +35,7 @@ namespace Platine\OAuth2\Service;
 use Platine\OAuth2\Configuration;
 use Platine\OAuth2\Entity\AccessToken;
 use Platine\OAuth2\Entity\Client;
+use Platine\OAuth2\Entity\Scope;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Repository\AccessTokenRepositoryInterface;
 
@@ -66,14 +67,14 @@ class AccessTokenService extends BaseTokenService
 
     /**
      * Create new access token
-     * @param TokenOwnerInterface $owner
-     * @param Client $client
-     * @param array<string>|array<Scope> $scopes
+     * @param TokenOwnerInterface|null $owner
+     * @param Client|null $client
+     * @param array<string>|Scope[] $scopes
      * @return AccessToken
      */
     public function createToken(
-        TokenOwnerInterface $owner,
-        Client $client,
+        ?TokenOwnerInterface $owner = null,
+        ?Client $client = null,
         array $scopes = []
     ): AccessToken {
         if (count($scopes) === 0) {
