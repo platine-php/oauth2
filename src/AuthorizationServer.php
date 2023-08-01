@@ -89,7 +89,7 @@ class AuthorizationServer implements AuthorizationServerInterface
      * @param ClientService $clientService
      * @param AccessTokenService $accessTokenService
      * @param RefreshTokenService $refreshTokenService
-     * @param array<string, GrantInterface> $grants
+     * @param array<GrantInterface> $grants
      */
     public function __construct(
         ClientService $clientService,
@@ -135,7 +135,6 @@ class AuthorizationServer implements AuthorizationServerInterface
             if ($client === null) {
                 throw OAuth2Exception::invalidClient('No client could be authenticated');
             }
-
             $response = $responseType->createAuthorizationResponse($request, $client, $owner);
         } catch (OAuth2Exception $ex) {
             $response = $this->createResponsFromException($ex);
