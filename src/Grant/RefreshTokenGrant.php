@@ -107,7 +107,7 @@ class RefreshTokenGrant extends BaseGrant
         $postParams = (array) $request->getParsedBody();
         $refreshTokenValue = $postParams['refresh_token'] ?? null;
         if ($refreshTokenValue === null) {
-            throw OAuth2Exception::invalidRequest('Refresh token is missin in request');
+            throw OAuth2Exception::invalidRequest('Refresh token is missing in request');
         }
 
         // We can fetch the actual token, and validate it
