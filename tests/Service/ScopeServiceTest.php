@@ -36,7 +36,7 @@ class ScopeServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $scopeRepository->expects($this->once())
-                ->method('save')
+                ->method('saveScope')
                 ->with($scope);
 
         $o = new ScopeService($scopeRepository);
@@ -52,7 +52,7 @@ class ScopeServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $scopeRepository->expects($this->once())
-                ->method('all')
+                ->method('getAllScopes')
                 ->will($this->returnValue([$scope]));
 
         $o = new ScopeService($scopeRepository);
@@ -70,7 +70,7 @@ class ScopeServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $scopeRepository->expects($this->once())
-                ->method('defaults')
+                ->method('getDefaultScopes')
                 ->will($this->returnValue([$scope]));
 
         $o = new ScopeService($scopeRepository);

@@ -45,5 +45,5 @@ interface AuthorizationCodeRepositoryInterface extends TokenRepositoryInterface
      * @param AuthorizationCode $token
      * @return AuthorizationCode
      */
-    public function save(AuthorizationCode $token): AuthorizationCode;
+    public function saveCode(AuthorizationCode $token): AuthorizationCode;
 }

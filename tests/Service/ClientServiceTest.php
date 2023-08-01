@@ -34,7 +34,7 @@ class ClientServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $clientRepository->expects($this->once())
-                ->method('save');
+                ->method('saveClient');
 
         $o = new ClientService($clientRepository);
 
@@ -53,7 +53,7 @@ class ClientServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $clientRepository->expects($this->once())
-                ->method('find')
+                ->method('findClient')
                 ->with('1234567890')
                 ->will($this->returnValue($client));
 

@@ -45,14 +45,14 @@ interface ClientRepositoryInterface
      * @param Client $client
      * @return Client
      */
-    public function save(Client $client): Client;
+    public function saveClient(Client $client): Client;
 
     /**
      * Find the client by id
      * @param string $id
      * @return Client|null
      */
-    public function find(string $id): ?Client;
+    public function findClient(string $id): ?Client;
 
     /**
      * Whether the given client id exist

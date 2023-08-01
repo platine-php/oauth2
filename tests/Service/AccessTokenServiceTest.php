@@ -195,7 +195,7 @@ class AccessTokenServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $tokenRepository->expects($this->once())
-                ->method('delete');
+                ->method('deleteToken');
 
         $scopeService = $this->getMockInstance(ScopeService::class);
         $cfg = $this->getMockInstance(Configuration::class);
@@ -221,7 +221,7 @@ class AccessTokenServiceTest extends PlatineTestCase
                                 ->getMock();
 
         $tokenRepository->expects($this->once())
-                ->method('cleanExpired');
+                ->method('cleanExpiredTokens');
 
         $scopeService = $this->getMockInstance(ScopeService::class);
         $cfg = $this->getMockInstance(Configuration::class);

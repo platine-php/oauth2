@@ -45,5 +45,5 @@ interface AccessTokenRepositoryInterface extends TokenRepositoryInterface
      * @param AccessToken $token
      * @return AccessToken
      */
-    public function save(AccessToken $token): AccessToken;
+    public function saveAccessToken(AccessToken $token): AccessToken;
 }

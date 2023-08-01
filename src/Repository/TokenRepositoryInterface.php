@@ -52,18 +52,18 @@ interface TokenRepositoryInterface
      * @param BaseToken $token
      * @return bool
      */
-    public function delete(BaseToken $token): bool;
+    public function deleteToken(BaseToken $token): bool;
 
     /**
      * Clean expired tokens
      * @return void
      */
-    public function cleanExpired(): void;
+    public function cleanExpiredTokens(): void;
 
     /**
      * Whether the given token exist
      * @param string $token
      * @return bool
      */
-    public function exists(string $token): bool;
+    public function isTokenExists(string $token): bool;
 }

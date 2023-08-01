@@ -104,7 +104,7 @@ class BaseTokenService
      */
     public function delete(BaseToken $token): void
     {
-        $this->tokenRepository->delete($token);
+        $this->tokenRepository->deleteToken($token);
     }
 
     /**
@@ -113,7 +113,7 @@ class BaseTokenService
      */
     public function cleanExpired(): void
     {
-        $this->tokenRepository->cleanExpired();
+        $this->tokenRepository->cleanExpiredTokens();
     }
 
     /**

@@ -45,17 +45,17 @@ interface ScopeRepositoryInterface
      * @param Scope $scope
      * @return Scope
      */
-    public function save(Scope $scope): Scope;
+    public function saveScope(Scope $scope): Scope;
 
     /**
      * Return all scopes
      * @return array<Scope>
      */
-    public function all(): array;
+    public function getAllScopes(): array;
 
     /**
      * Return all default scopes
      * @return array<Scope>
      */
-    public function defaults(): array;
+    public function getDefaultScopes(): array;
 }

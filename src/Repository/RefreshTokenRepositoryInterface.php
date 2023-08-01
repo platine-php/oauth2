@@ -45,5 +45,5 @@ interface RefreshTokenRepositoryInterface extends TokenRepositoryInterface
      * @param RefreshToken $token
      * @return RefreshToken
      */
-    public function save(RefreshToken $token): RefreshToken;
+    public function saveRefreshToken(RefreshToken $token): RefreshToken;
 }

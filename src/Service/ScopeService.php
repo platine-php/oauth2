@@ -63,7 +63,7 @@ class ScopeService
      */
     public function create(Scope $scope): Scope
     {
-        return $this->scopeRepository->save($scope);
+        return $this->scopeRepository->saveScope($scope);
     }
 
     /**
@@ -72,7 +72,7 @@ class ScopeService
      */
     public function all(): array
     {
-        return $this->scopeRepository->all();
+        return $this->scopeRepository->getAllScopes();
     }
 
     /**
@@ -81,6 +81,6 @@ class ScopeService
      */
     public function defaults(): array
     {
-        return $this->scopeRepository->defaults();
+        return $this->scopeRepository->getDefaultScopes();
     }
 }

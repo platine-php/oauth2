@@ -77,7 +77,7 @@ class ClientService
         } while ($this->clientRepository->clientIdExists($client->getId()));
 
         $secret = $client->generateSecret();
-        $this->clientRepository->save($client);
+        $this->clientRepository->saveClient($client);
 
         return [$client, $secret];
     }
@@ -89,6 +89,6 @@ class ClientService
      */
     public function find(string $id): ?Client
     {
-        return $this->clientRepository->find($id);
+        return $this->clientRepository->findClient($id);
     }
 }

@@ -89,8 +89,8 @@ class AccessTokenService extends BaseTokenService
                 $client,
                 $scopes
             );
-        } while ($this->tokenRepository->exists($token->getToken()));
+        } while ($this->tokenRepository->isTokenExists($token->getToken()));
 
-        return $this->tokenRepository->save($token);
+        return $this->tokenRepository->saveAccessToken($token);
     }
 }
