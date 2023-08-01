@@ -66,7 +66,7 @@ class ClientCredentialsGrant extends BaseGrant
         $this->accessTokenService = $accessTokenService;
     }
 
-        /**
+     /**
      * {@inheritdoc}
      */
     public function createAuthorizationResponse(

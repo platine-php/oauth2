@@ -32,58 +32,26 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2;
 
-use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequestInterface;
-use Platine\OAuth2\Entity\TokenOwnerInterface;
+use Platine\OAuth2\Entity\AccessToken;
 
 /**
- * The authorization server main role is to create access tokens or refresh tokens
+ * The resource server main role is to validate the access token and that its scope covers the
+ * requested resource
  *
- * @class AuthorizationServerInterface
+ * Currently, the resource server only implements the Bearer token usage, as described in the
+ * RFC 6750 (http://tools.ietf.org/html/rfc6750)
+ *
+ * @class ResourceServerInterface
  * @package Platine\OAuth2
  */
-interface AuthorizationServerInterface
+interface ResourceServerInterface
 {
     /**
-     * Whether the authorization server has support the given grant
-     * @param string $grant
-     * @return bool
-     */
-    public function hasGrant(string $grant): bool;
-
-    /**
-     * Whether the authorization server has support the given response type
-     * @param string $responseType
-     * @return bool
-     */
-    public function hasResponseType(string $responseType): bool;
-
-    /**
-     * Handle authorization request
+     * Return the access token
      * @param ServerRequestInterface $request
-     * @param TokenOwnerInterface|null $owner
-     * @return ResponseInterface
+     * @param string|array<string> $scopes
+     * @return AccessToken|null
      */
-    public function handleAuthorizationRequest(
-        ServerRequestInterface $request,
-        ?TokenOwnerInterface $owner = null
-    ): ResponseInterface;
-
-    /**
-     * Handle token request
-     * @param ServerRequestInterface $request
-     * @param TokenOwnerInterface|null $owner
-     * @return ResponseInterface
-     */
-    public function handleTokenRequest(
-        ServerRequestInterface $request,
-        ?TokenOwnerInterface $owner = null
-    ): ResponseInterface;
-
-    /**
-     * Handle token revocation request
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     */
-    public function handleTokenRevocationRequest(ServerRequestInterface $request): ResponseInterface;
+    public function getAccessToken(ServerRequestInterface $request, $scopes = []): ?AccessToken;
 }
