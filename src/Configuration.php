@@ -55,24 +55,6 @@ use Platine\Stdlib\Config\AbstractConfiguration;
 class Configuration extends AbstractConfiguration
 {
     /**
-     * Return the access token request attribute value
-     * @return string
-     */
-    public function getTokenRequestAttribute(): string
-    {
-        return $this->get('request_attribute.token');
-    }
-
-    /**
-     * Return the owner request attribute value
-     * @return string
-     */
-    public function getOwnerRequestAttribute(): string
-    {
-        return $this->get('request_attribute.owner');
-    }
-
-    /**
      * Return the authorization code TTL value
      * @return int
      */
@@ -132,9 +114,6 @@ class Configuration extends AbstractConfiguration
     public function getValidationRules(): array
     {
         return [
-            'request_attribute' => 'array',
-            'request_attribute.token' => 'string',
-            'request_attribute.owner' => 'string',
             'ttl' => 'array',
             'ttl.authorization_code' => 'integer',
             'ttl.access_token' => 'integer',
@@ -159,10 +138,6 @@ class Configuration extends AbstractConfiguration
             ],
             'rotate_refresh_token' => false,
             'revoke_rotated_refresh_token' => true,
-            'request_attribute' => [
-                'token' => 'oauth_token',
-                'owner' => 'owner',
-            ],
         ];
     }
 }

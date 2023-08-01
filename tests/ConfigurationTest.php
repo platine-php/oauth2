@@ -33,8 +33,6 @@ class ConfigurationTest extends PlatineTestCase
     {
         $cfg = new Configuration([]);
         $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
-        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
-        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
         $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
         $this->assertEquals(3600, $cfg->getAccessTokenTtl());
         $this->assertEquals(86400, $cfg->getRefreshTokenTtl());
@@ -47,8 +45,6 @@ class ConfigurationTest extends PlatineTestCase
     {
         $cfg = new Configuration(['grants' => ['foo', 'bar'], 'rotate_refresh_token' => true]);
         $this->assertEquals(120, $cfg->get('ttl.authorization_code'));
-        $this->assertEquals('oauth_token', $cfg->getTokenRequestAttribute());
-        $this->assertEquals('owner', $cfg->getOwnerRequestAttribute());
         $this->assertEquals(120, $cfg->getAuthorizationCodeTtl());
         $this->assertEquals(3600, $cfg->getAccessTokenTtl());
         $this->assertEquals(86400, $cfg->getRefreshTokenTtl());

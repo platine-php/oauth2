@@ -37,6 +37,7 @@ use Platine\Http\Handler\RequestHandlerInterface;
 use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequestInterface;
 use Platine\OAuth2\AuthorizationServerInterface;
+use Platine\OAuth2\Entity\TokenOwnerInterface;
 
 /**
  * @class AuthorizationRequestMiddleware
@@ -51,22 +52,13 @@ class AuthorizationRequestMiddleware implements MiddlewareInterface
     protected AuthorizationServerInterface $authorizationServer;
 
     /**
-     * The request attribute name to fetch owner
-     * @var string
-     */
-    protected string $ownerRequestAttribute;
-
-    /**
      * Create new instance
      * @param AuthorizationServerInterface $authorizationServer
-     * @param string $ownerRequestAttribute
      */
     public function __construct(
-        AuthorizationServerInterface $authorizationServer,
-        string $ownerRequestAttribute = 'owner'
+        AuthorizationServerInterface $authorizationServer
     ) {
         $this->authorizationServer = $authorizationServer;
-        $this->ownerRequestAttribute = $ownerRequestAttribute;
     }
 
 
@@ -77,7 +69,7 @@ class AuthorizationRequestMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-        $owner = $request->getAttribute($this->ownerRequestAttribute);
+        $owner = $request->getAttribute(TokenOwnerInterface::class);
 
         return $this->authorizationServer->handleAuthorizationRequest($request, $owner);
     }

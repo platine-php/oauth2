@@ -36,6 +36,7 @@ use Platine\Http\Handler\MiddlewareInterface;
 use Platine\Http\Handler\RequestHandlerInterface;
 use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequestInterface;
+use Platine\OAuth2\Entity\AccessToken;
 use Platine\OAuth2\Exception\InvalidAccessTokenException;
 use Platine\OAuth2\ResourceServerInterface;
 use Platine\OAuth2\Response\JsonResponse;
@@ -61,22 +62,13 @@ class ResourceServerMiddleware implements MiddlewareInterface
     protected ResourceServerInterface $resourceServer;
 
     /**
-     * The request attribute name to fetch access token
-     * @var string
-     */
-    protected string $tokenRequestAttribute;
-
-    /**
      * Create new instance
      * @param ResourceServerInterface $resourceServer
-     * @param string $tokenRequestAttribute
      */
     public function __construct(
-        ResourceServerInterface $resourceServer,
-        string $tokenRequestAttribute = 'oauth_token'
+        ResourceServerInterface $resourceServer
     ) {
         $this->resourceServer = $resourceServer;
-        $this->tokenRequestAttribute = $tokenRequestAttribute;
     }
 
 
@@ -87,8 +79,9 @@ class ResourceServerMiddleware implements MiddlewareInterface
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
+        $scopes = $request->getAttribute('scopes', []);
         try {
-            $token = $this->resourceServer->getAccessToken($request);
+            $token = $this->resourceServer->getAccessToken($request, $scopes);
         } catch (InvalidAccessTokenException $ex) {
             // If we're here, this means that there was an access token, but it's either expired
             // or invalid. If that's the case we must immediately return
@@ -101,7 +94,6 @@ class ResourceServerMiddleware implements MiddlewareInterface
             );
         }
 
-
-        return $handler->handle($request->withAttribute($this->tokenRequestAttribute, $token));
+        return $handler->handle($request->withAttribute(AccessToken::class, $token));
     }
 }
