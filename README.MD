@@ -21,7 +21,7 @@ composer require platine-php/oauth2
 ```
 
 ### License
-MIT License See [LICENSE.MD](LICENSE.MD)
+MIT and BSD-3-Clause License See [LICENSE.MD](LICENSE.MD)
 
 ### Resources
 - [Documentation](https://docs.platine-php.com/packages/oauth2)

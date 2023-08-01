@@ -92,7 +92,7 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
         $this->refreshTokenService = $refreshTokenService;
     }
 
-        /**
+     /**
      * {@inheritdoc}
      */
     public function createAuthorizationResponse(
