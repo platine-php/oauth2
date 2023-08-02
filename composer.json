@@ -53,6 +53,11 @@
     "extra": {
         "branch-alias": {
             "dev-develop": "1.0.x-dev"
+        },
+        "platine": {
+            "migration": [
+                "platine/migrations/"
+            ]
         }
     },
 

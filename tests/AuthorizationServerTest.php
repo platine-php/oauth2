@@ -532,7 +532,6 @@ class AuthorizationServerTest extends PlatineTestCase
             ],
         ]);
 
-        $this->expectException(OAuth2Exception::class);
         $res = $o->handleTokenRevocationRequest($request);
         $this->assertInstanceOf(ResponseInterface::class, $res);
         $this->assertEquals($res->getStatusCode(), 400);
@@ -575,7 +574,6 @@ class AuthorizationServerTest extends PlatineTestCase
             ],
         ]);
 
-        $this->expectException(OAuth2Exception::class);
         $res = $o->handleTokenRevocationRequest($request);
         $this->assertInstanceOf(ResponseInterface::class, $res);
         $this->assertEquals($res->getStatusCode(), 400);
@@ -650,11 +648,9 @@ class AuthorizationServerTest extends PlatineTestCase
             ],
         ]);
 
-        $this->expectException(OAuth2Exception::class);
         $res = $o->handleTokenRevocationRequest($request);
         $this->assertInstanceOf(ResponseInterface::class, $res);
         $this->assertEquals($res->getStatusCode(), 400);
-        $this->assertEquals((string) $res->getBody(), 400);
     }
 
 

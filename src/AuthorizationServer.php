@@ -182,51 +182,53 @@ class AuthorizationServer implements AuthorizationServerInterface
      */
     public function handleTokenRevocationRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $postParams = (array) $request->getParsedBody();
-        $tokenParam = $postParams['token'] ?? null;
-        $tokenHint = $postParams['token_type_hint'] ?? null;
-        if ($tokenParam === null || $tokenHint === null) {
-            throw OAuth2Exception::invalidRequest(
-                'Cannot revoke a token as the "token" and/or "token_type_hint" parameters are missing'
-            );
-        }
-
-        if (in_array($tokenHint, ['access_token', 'refresh_token']) === false) {
-            throw OAuth2Exception::unsupportedTokenType(sprintf(
-                'Authorization server does not support revocation of token of type "%s"',
-                $tokenHint
-            ));
-        }
-
-        if ($tokenHint === 'access_token') {
-            $token = $this->accessTokenService->getToken((string) $tokenParam);
-        } else {
-            $token = $this->refreshTokenService->getToken((string) $tokenParam);
-        }
-
         $response = new Response();
-        // According to spec, we should return 200 if token is invalid
-        if ($token === null) {
-            return $response;
-        }
-
-        // Now, we must validate the client if the token was generated against a non-public client
-        if ($token->getClient() !== null && $token->getClient()->isPublic() === false) {
-            $requestClient = $this->getClient($request, false);
-
-            if ($requestClient !== $token->getClient()) {
-                throw OAuth2Exception::invalidClient(
-                    'Token was issued for another client and cannot be revoked'
+        try {
+            $postParams = (array) $request->getParsedBody();
+            $tokenParam = $postParams['token'] ?? null;
+            $tokenHint = $postParams['token_type_hint'] ?? null;
+            if ($tokenParam === null || $tokenHint === null) {
+                throw OAuth2Exception::invalidRequest(
+                    'Cannot revoke a token as the "token" and/or "token_type_hint" parameters are missing'
                 );
             }
-        }
 
-        try {
+            if (in_array($tokenHint, ['access_token', 'refresh_token']) === false) {
+                throw OAuth2Exception::unsupportedTokenType(sprintf(
+                    'Authorization server does not support revocation of token of type "%s"',
+                    $tokenHint
+                ));
+            }
+
+            if ($tokenHint === 'access_token') {
+                $token = $this->accessTokenService->getToken((string) $tokenParam);
+            } else {
+                $token = $this->refreshTokenService->getToken((string) $tokenParam);
+            }
+
+            // According to spec, we should return 200 if token is invalid
+            if ($token === null) {
+                return $response;
+            }
+
+            // Now, we must validate the client if the token was generated against a non-public client
+            if ($token->getClient() !== null && $token->getClient()->isPublic() === false) {
+                $requestClient = $this->getClient($request, false);
+
+                if ($requestClient !== $token->getClient()) {
+                    throw OAuth2Exception::invalidClient(
+                        'Token was issued for another client and cannot be revoked'
+                    );
+                }
+            }
+
             if ($tokenHint === 'access_token') {
                 $this->accessTokenService->delete($token);
             } else {
                 $this->refreshTokenService->delete($token);
             }
+        } catch (OAuth2Exception $ex) {
+            $response = $this->createResponsFromException($ex);
         } catch (Throwable $ex) {
             // According to spec (https://tools.ietf.org/html/rfc7009#section-2.2.1),
             // we should return a server 503
