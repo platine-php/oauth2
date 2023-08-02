@@ -237,15 +237,18 @@ class AuthorizationServer implements AuthorizationServerInterface
             } else {
                 $this->refreshTokenService->delete($token);
             }
-        } catch (OAuth2Exception $ex) {
-            $response = $this->createResponsFromException($ex);
-        } catch (Throwable $ex) {
+        } catch (OAuth2Exception $exception) {
+            $response = $this->createResponsFromException($exception);
+        } catch (Throwable $exception) {
             // According to spec (https://tools.ietf.org/html/rfc7009#section-2.2.1),
             // we should return a server 503
             // error if we cannot delete the token for any reason
             $response = $response->withStatus(503, 'An error occurred while trying to delete the token');
-            $this->logger->error('Error when revoke token: {exception}', [
-                'exception' => $ex,
+
+            $this->logger->error('OAuth2 Error when revoke token: {type}::{code}:{description}', [
+                'code' => $exception->getCode(),
+                'description' => $exception->getMessage(),
+                'type' => get_class($exception),
             ]);
         }
 
@@ -350,8 +353,10 @@ class AuthorizationServer implements AuthorizationServerInterface
             'error_description' => $exception->getMessage(),
         ];
 
-        $this->logger->error('OAuth2 error: {exception}', [
-            'exception' => $exception,
+        $this->logger->error('OAuth2 error: {type}::{code}:{description}', [
+            'code' => $exception->getCode(),
+            'description' => $exception->getMessage(),
+            'type' => get_class($exception),
         ]);
 
         return new JsonResponse($data, 400);
