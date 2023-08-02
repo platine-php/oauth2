@@ -35,6 +35,7 @@ namespace Platine\OAuth2;
 use Platine\Http\Response;
 use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequestInterface;
+use Platine\Logger\LoggerInterface;
 use Platine\OAuth2\AuthorizationServerInterface;
 use Platine\OAuth2\Entity\Client;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
@@ -71,6 +72,12 @@ class AuthorizationServer implements AuthorizationServerInterface
      */
     protected RefreshTokenService $refreshTokenService;
 
+    /**
+     * The logger instance
+     * @var LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
 
     /**
      * The grant list
@@ -89,17 +96,20 @@ class AuthorizationServer implements AuthorizationServerInterface
      * @param ClientService $clientService
      * @param AccessTokenService $accessTokenService
      * @param RefreshTokenService $refreshTokenService
+     * @param LoggerInterface $logger
      * @param array<GrantInterface> $grants
      */
     public function __construct(
         ClientService $clientService,
         AccessTokenService $accessTokenService,
         RefreshTokenService $refreshTokenService,
+        LoggerInterface $logger,
         array $grants = []
     ) {
         $this->clientService = $clientService;
         $this->accessTokenService = $accessTokenService;
         $this->refreshTokenService = $refreshTokenService;
+        $this->logger = $logger;
 
         foreach ($grants as /** @var GrantInterface $grant */ $grant) {
             if ($grant instanceof AuthorizationServerAwareInterface) {
@@ -234,6 +244,9 @@ class AuthorizationServer implements AuthorizationServerInterface
             // we should return a server 503
             // error if we cannot delete the token for any reason
             $response = $response->withStatus(503, 'An error occurred while trying to delete the token');
+            $this->logger->error('Error when revoke token: {exception}', [
+                'exception' => $ex,
+            ]);
         }
 
         return $response;
@@ -336,6 +349,10 @@ class AuthorizationServer implements AuthorizationServerInterface
             'error' => $exception->getCode(),
             'error_description' => $exception->getMessage(),
         ];
+
+        $this->logger->error('OAuth2 error: {exception}', [
+            'exception' => $exception,
+        ]);
 
         return new JsonResponse($data, 400);
     }

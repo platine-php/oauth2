@@ -8,6 +8,7 @@ use Platine\Dev\PlatineTestCase;
 use Platine\Http\Response;
 use Platine\Http\ResponseInterface;
 use Platine\Http\ServerRequest;
+use Platine\Logger\Logger;
 use Platine\OAuth2\AuthorizationServer;
 use Platine\OAuth2\Entity\AccessToken;
 use Platine\OAuth2\Entity\Client;
@@ -42,6 +43,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -52,6 +54,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
         $this->assertInstanceOf(AuthorizationServer::class, $o);
@@ -81,6 +84,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -91,6 +95,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
         $this->assertInstanceOf(AuthorizationServer::class, $o);
@@ -110,6 +115,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -120,6 +126,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -147,6 +154,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -157,6 +165,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -187,6 +196,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -197,6 +207,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -226,6 +237,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -238,6 +250,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -291,6 +304,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -303,6 +317,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -358,6 +373,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -370,6 +386,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -415,6 +432,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -427,6 +445,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -462,6 +481,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -474,6 +494,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -507,6 +528,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -519,6 +541,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -549,6 +572,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -561,6 +585,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -620,6 +645,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -634,6 +660,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -678,6 +705,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -692,6 +720,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -744,6 +773,7 @@ class AuthorizationServerTest extends PlatineTestCase
                  'getResponseType',
              ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -758,6 +788,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 
@@ -809,6 +840,7 @@ class AuthorizationServerTest extends PlatineTestCase
                 'getResponseType',
             ]
         );
+        $logger = $this->getMockInstance(Logger::class);
         $passwordGrant = $this->getMockInstance(PasswordGrant::class);
         $grants = [$authGrant, $passwordGrant];
 
@@ -834,6 +866,7 @@ class AuthorizationServerTest extends PlatineTestCase
             $clientService,
             $accessTokenService,
             $refreshTokenService,
+            $logger,
             $grants
         );
 

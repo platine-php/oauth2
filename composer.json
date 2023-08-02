@@ -21,6 +21,7 @@
     "require": {
         "php": "^7.4 || ^8",
         "platine-php/http": "^1.0@dev",
+        "platine-php/logger": "^1.0@dev",
         "platine-php/request-handler": "^1.0@dev",
         "platine-php/stdlib": "1.0.x-dev"
     },
