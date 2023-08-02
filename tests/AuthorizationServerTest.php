@@ -594,6 +594,7 @@ class AuthorizationServerTest extends PlatineTestCase
         $tokenClient = $this->getMockInstance(
             Client::class,
             [
+                 'getId' => '123',
                  'isPublic' => false,
                  'authenticate' => true,
                  'hasRedirectUri' => true,

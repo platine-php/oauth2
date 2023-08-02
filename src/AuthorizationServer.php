@@ -215,7 +215,7 @@ class AuthorizationServer implements AuthorizationServerInterface
             if ($token->getClient() !== null && $token->getClient()->isPublic() === false) {
                 $requestClient = $this->getClient($request, false);
 
-                if ($requestClient !== $token->getClient()) {
+                if ($requestClient !== null && $requestClient->getId() !== $token->getClient()->getId()) {
                     throw OAuth2Exception::invalidClient(
                         'Token was issued for another client and cannot be revoked'
                     );
