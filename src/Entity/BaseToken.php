@@ -224,13 +224,13 @@ abstract class BaseToken
         if (is_array($scopes)) {
             $scopes = array_map(fn($scope) => (string) $scope, $scopes);
         }
-
+        
         $token = new static();
         $token->token = bin2hex(random_bytes(20));
         $token->owner = $owner;
         $token->client = $client;
         $token->scopes = $scopes ?? [];
-        $token->expireAt = $ttl ? (new DateTime())->modify(sprintf('+%d seconds', $ttl)) : null;
+        $token->expireAt = $ttl ? (new DateTime())->modify(sprintf('%+d seconds', $ttl)) : null;
 
         return $token;
     }
