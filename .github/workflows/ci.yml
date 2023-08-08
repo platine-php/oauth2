@@ -38,7 +38,7 @@ jobs:
       run: composer install && composer dump-autoload
 
     - name: Run tests and collect coverage
-      run: vendor/bin/phpunit --coverage-clover coverage.xml tests
+      run: vendor/bin/phpunit --coverage-clover clover.xml tests
     - name: Upload coverage to Codacy
       run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
       env:
