@@ -5,7 +5,7 @@
 [![Latest Stable Version](https://poser.pugx.org/platine-php/oauth2/v)](https://packagist.org/packages/platine-php/oauth2)
 [![Latest Unstable Version](https://poser.pugx.org/platine-php/oauth2/v/unstable)](https://packagist.org/packages/platine-php/oauth2)
 [![Total Downloads](https://poser.pugx.org/platine-php/oauth2/downloads)](https://packagist.org/packages/platine-php/oauth2)
-[![License](https://poser.pugx.org/platine-php/oauth2/license)](https://packagist.org/packages/platine-php/oauth2)
+[![License](https://poser.pugx.org/platine-php/oauth2/license)](https://packagist.org/packages/platine-php/oauth2)  
 ![Build Status](https://github.com/platine-php/oauth2/actions/workflows/ci.yml/badge.svg)
 [![Quality Score](https://img.shields.io/scrutinizer/g/platine-php/oauth2.svg?style=flat-square)](https://scrutinizer-ci.com/g/platine-php/oauth2)
 [![Maintainability](https://app.codacy.com/project/badge/Grade/017929cb6ee34bb69f7742e5245bdc95)](https://app.codacy.com/gh/platine-php/oauth2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
