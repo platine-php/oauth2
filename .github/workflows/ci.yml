@@ -21,8 +21,8 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        extensions: intl, fileinfo #optional
-        ini-values: "post_max_size=256M" #optional
+        extensions: intl, fileinfo, xdebug #optional
+        ini-values: "post_max_size=256M, xdebug.mode=coverage" #optional
     - name: Check PHP Version
       run: php -v
     - name: Cache Composer packages
