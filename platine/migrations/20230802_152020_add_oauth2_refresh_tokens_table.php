@@ -36,7 +36,8 @@ class AddOauth2RefreshTokensTable20230802152020 extends AbstractMigration
 
             $table->foreign('client_id')
                 ->references('oauth_clients', 'id')
-                ->onDelete('NO ACTION');
+                ->onDelete('NO ACTION')
+                ->onUpdate('CASCADE');
 
             $table->engine('INNODB');
         });

@@ -39,7 +39,8 @@ class AddOauth2AuthorizationCodesTable20230802152529 extends AbstractMigration
 
             $table->foreign('client_id')
                 ->references('oauth_clients', 'id')
-                ->onDelete('NO ACTION');
+                ->onDelete('NO ACTION')
+                ->onUpdate('CASCADE');
 
             $table->engine('INNODB');
         });
