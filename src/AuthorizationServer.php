@@ -147,7 +147,7 @@ class AuthorizationServer implements AuthorizationServerInterface
             }
             $response = $responseType->createAuthorizationResponse($request, $client, $owner);
         } catch (OAuth2Exception $ex) {
-            $response = $this->createResponsFromException($ex);
+            $response = $this->createResponseFromException($ex);
         }
 
         return $response->withHeader('Content-Type', 'application/json');
@@ -177,7 +177,7 @@ class AuthorizationServer implements AuthorizationServerInterface
 
             $response = $grant->createTokenResponse($request, $client, $owner);
         } catch (OAuth2Exception $ex) {
-            $response = $this->createResponsFromException($ex);
+            $response = $this->createResponseFromException($ex);
         }
 
         // According to the spec, we must set those headers
@@ -238,7 +238,7 @@ class AuthorizationServer implements AuthorizationServerInterface
                 $this->refreshTokenService->delete($token);
             }
         } catch (OAuth2Exception $exception) {
-            $response = $this->createResponsFromException($exception);
+            $response = $this->createResponseFromException($exception);
         } catch (Throwable $exception) {
             // According to spec (https://tools.ietf.org/html/rfc7009#section-2.2.1),
             // we should return a server 503
@@ -346,7 +346,7 @@ class AuthorizationServer implements AuthorizationServerInterface
      * @param OAuth2Exception $exception
      * @return ResponseInterface
      */
-    protected function createResponsFromException(OAuth2Exception $exception): ResponseInterface
+    protected function createResponseFromException(OAuth2Exception $exception): ResponseInterface
     {
         $data = [
             'error' => $exception->getCode(),
