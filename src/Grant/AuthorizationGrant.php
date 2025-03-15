@@ -38,7 +38,7 @@ use Platine\OAuth2\AuthorizationServerInterface;
 use Platine\OAuth2\Entity\Client;
 use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Exception\OAuth2Exception;
-use Platine\OAuth2\Response\RedirectResponse;
+use Platine\OAuth2\Response\OAuthRedirectResponse;
 use Platine\OAuth2\Service\AccessTokenService;
 use Platine\OAuth2\Service\AuthorizationCodeService;
 use Platine\OAuth2\Service\RefreshTokenService;
@@ -138,7 +138,7 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
             'state' => $state,
         ]));
 
-        return new RedirectResponse($redirectUri . '?' . $uri);
+        return new OAuthRedirectResponse($redirectUri . '?' . $uri);
     }
 
     /**

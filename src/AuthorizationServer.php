@@ -42,7 +42,7 @@ use Platine\OAuth2\Entity\TokenOwnerInterface;
 use Platine\OAuth2\Exception\OAuth2Exception;
 use Platine\OAuth2\Grant\AuthorizationServerAwareInterface;
 use Platine\OAuth2\Grant\GrantInterface;
-use Platine\OAuth2\Response\JsonResponse;
+use Platine\OAuth2\Response\OAuthJsonResponse;
 use Platine\OAuth2\Service\AccessTokenService;
 use Platine\OAuth2\Service\ClientService;
 use Platine\OAuth2\Service\RefreshTokenService;
@@ -359,7 +359,7 @@ class AuthorizationServer implements AuthorizationServerInterface
             'type' => get_class($exception),
         ]);
 
-        return new JsonResponse($data, 400);
+        return new OAuthJsonResponse($data, 400);
     }
 
     /**

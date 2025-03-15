@@ -35,7 +35,7 @@ namespace Platine\OAuth2\Grant;
 use Platine\Http\ResponseInterface;
 use Platine\OAuth2\Entity\AccessToken;
 use Platine\OAuth2\Entity\RefreshToken;
-use Platine\OAuth2\Response\JsonResponse;
+use Platine\OAuth2\Response\OAuthJsonResponse;
 
 /**
  * @class BaseGrant
@@ -89,6 +89,6 @@ abstract class BaseGrant implements GrantInterface
             $body['refresh_token'] = $refreshToken->getToken();
         }
 
-        return new JsonResponse(array_filter($body));
+        return new OAuthJsonResponse(array_filter($body));
     }
 }

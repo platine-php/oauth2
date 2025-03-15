@@ -230,7 +230,16 @@ abstract class BaseToken
         $token->owner = $owner;
         $token->client = $client;
         $token->scopes = $scopes ?? [];
-        $token->expireAt = $ttl ? (new DateTime())->modify(sprintf('%+d seconds', $ttl)) : null;
+
+        $expireAt = null;
+        if ($ttl > 0) {
+            $res = (new DateTime())->modify(sprintf('%+d seconds', $ttl));
+            if ($res !== false) {
+                $expireAt = $res;
+            }
+        }
+
+        $token->expireAt = $expireAt;
 
         return $token;
     }

@@ -33,20 +33,28 @@ declare(strict_types=1);
 namespace Platine\OAuth2\Response;
 
 use Platine\Http\Response;
+use Platine\Stdlib\Helper\Json;
 
 /**
- * @class RedirectResponse
+ * @class OAuthJsonResponse
  * @package Platine\OAuth2\Response
  */
-class RedirectResponse extends Response
+class OAuthJsonResponse extends Response
 {
     /**
      * Create new instance
-     * @param string $uri
+     * @param mixed $data
+     * @param int $statusCode
+     * @param string $reasonPhrase
      */
-    public function __construct(string $uri = '/')
-    {
-        parent::__construct(302);
-        $this->headers['location'] = [$uri];
+    public function __construct(
+        $data,
+        int $statusCode = 200,
+        string $reasonPhrase = ''
+    ) {
+        parent::__construct($statusCode, $reasonPhrase);
+
+        $this->headers['content-type'] = ['application/json'];
+        $this->getBody()->write(Json::encode($data));
     }
 }

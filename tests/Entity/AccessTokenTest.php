@@ -62,18 +62,18 @@ class AccessTokenTest extends PlatineTestCase
 
         $mock_bin2hex = true;
 
-        $o = AccessToken::createNewAccessToken(-100, $owner = null, $client = null, ['read']);
+        $o = AccessToken::createNewAccessToken(-0, $owner = null, $client = null, ['read']);
         $this->assertInstanceOf(AccessToken::class, $o);
 
-        $this->assertInstanceOf(DateTimeInterface::class, $o->getExpireAt());
+        $this->assertNull($o->getExpireAt());
         $this->assertNull($o->getOwner());
         $this->assertNull($o->getClient());
-        $this->assertTrue($o->isExpired());
-        $this->assertEquals(-100, $o->getExpiresIn());
+        $this->assertFalse($o->isExpired());
+        $this->assertEquals(0, $o->getExpiresIn());
         $this->assertEquals('token_bin2hex', $o->getToken());
         $this->assertCount(1, $o->getScopes());
         $this->assertTrue($o->matchScopes('read'));
-        $this->assertFalse($o->isValid('read'));
+        $this->assertTrue($o->isValid('read'));
     }
 
     public function testHidrate()
