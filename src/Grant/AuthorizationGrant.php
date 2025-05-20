@@ -53,24 +53,6 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
     public const GRANT_RESPONSE_TYPE = 'code';
 
     /**
-     * The AuthorizationCodeService
-     * @var AuthorizationCodeService
-     */
-    protected AuthorizationCodeService $authorizationCodeService;
-
-    /**
-     * The AccessTokenService
-     * @var AccessTokenService
-     */
-    protected AccessTokenService $accessTokenService;
-
-    /**
-     * The RefreshTokenService
-     * @var RefreshTokenService
-     */
-    protected RefreshTokenService $refreshTokenService;
-
-    /**
      * The authorization server instance
      * @var AuthorizationServerInterface|null
      */
@@ -83,13 +65,10 @@ class AuthorizationGrant extends BaseGrant implements AuthorizationServerAwareIn
      * @param RefreshTokenService $refreshTokenService
      */
     public function __construct(
-        AuthorizationCodeService $authorizationCodeService,
-        AccessTokenService $accessTokenService,
-        RefreshTokenService $refreshTokenService
+        protected AuthorizationCodeService $authorizationCodeService,
+        protected AccessTokenService $accessTokenService,
+        protected RefreshTokenService $refreshTokenService
     ) {
-        $this->authorizationCodeService = $authorizationCodeService;
-        $this->accessTokenService = $accessTokenService;
-        $this->refreshTokenService = $refreshTokenService;
     }
 
      /**

@@ -12,7 +12,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/017929cb6ee34bb69f7742e5245bdc95)](https://app.codacy.com/gh/platine-php/oauth2/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 
 ### Requirements 
-- **PHP >= 7.4**, **PHP 8** 
+- **PHP >= 8.0**
 
 ### Installation
 #### Using composer (recommended)
@@ -21,7 +21,7 @@ composer require platine-php/oauth2
 ```
 
 ### License
-MIT and BSD-3-Clause License See [LICENSE.MD](LICENSE.MD)
+MIT and BSD-3-Clause License, See [LICENSE.MD](LICENSE.MD)
 
 ### Resources
 - [Documentation](https://docs.platine-php.com/packages/oauth2)

@@ -55,24 +55,6 @@ class PasswordGrant extends BaseGrant implements AuthorizationServerAwareInterfa
     public const GRANT_RESPONSE_TYPE = '';
 
     /**
-     * The UserAuthenticationInterface
-     * @var UserAuthenticationInterface
-     */
-    protected UserAuthenticationInterface $userAuthentication;
-
-    /**
-     * The AccessTokenService
-     * @var AccessTokenService
-     */
-    protected AccessTokenService $accessTokenService;
-
-    /**
-     * The RefreshTokenService
-     * @var RefreshTokenService
-     */
-    protected RefreshTokenService $refreshTokenService;
-
-    /**
      * The authorization server instance
      * @var AuthorizationServerInterface|null
      */
@@ -85,13 +67,10 @@ class PasswordGrant extends BaseGrant implements AuthorizationServerAwareInterfa
      * @param RefreshTokenService $refreshTokenService
      */
     public function __construct(
-        UserAuthenticationInterface $userAuthentication,
-        AccessTokenService $accessTokenService,
-        RefreshTokenService $refreshTokenService
+        protected UserAuthenticationInterface $userAuthentication,
+        protected AccessTokenService $accessTokenService,
+        protected RefreshTokenService $refreshTokenService
     ) {
-        $this->userAuthentication = $userAuthentication;
-        $this->accessTokenService = $accessTokenService;
-        $this->refreshTokenService = $refreshTokenService;
     }
 
         /**

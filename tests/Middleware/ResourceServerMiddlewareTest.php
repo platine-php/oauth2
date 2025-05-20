@@ -39,7 +39,7 @@ class ResourceServerMiddlewareTest extends PlatineTestCase
         $request = $this->getMockInstance(
             ServerRequest::class,
             [
-                'getAttribute' => null
+                'getAttribute' => []
             ],
             [
                 'withAttribute',
@@ -72,7 +72,7 @@ class ResourceServerMiddlewareTest extends PlatineTestCase
         $request = $this->getMockInstance(
             ServerRequest::class,
             [
-                'getAttribute' => null
+                'getAttribute' => []
             ],
             [
                 'withAttribute',

@@ -55,31 +55,6 @@ use Throwable;
 class AuthorizationServer implements AuthorizationServerInterface
 {
     /**
-     * The ClientService
-     * @var ClientService
-     */
-    protected ClientService $clientService;
-
-    /**
-     * The AccessTokenService
-     * @var AccessTokenService
-     */
-    protected AccessTokenService $accessTokenService;
-
-    /**
-     * The RefreshTokenService
-     * @var RefreshTokenService
-     */
-    protected RefreshTokenService $refreshTokenService;
-
-    /**
-     * The logger instance
-     * @var LoggerInterface
-     */
-    protected LoggerInterface $logger;
-
-
-    /**
      * The grant list
      * @var array<string, GrantInterface>
      */
@@ -97,20 +72,15 @@ class AuthorizationServer implements AuthorizationServerInterface
      * @param AccessTokenService $accessTokenService
      * @param RefreshTokenService $refreshTokenService
      * @param LoggerInterface $logger
-     * @param array<GrantInterface> $grants
+     * @param GrantInterface[] $grants
      */
     public function __construct(
-        ClientService $clientService,
-        AccessTokenService $accessTokenService,
-        RefreshTokenService $refreshTokenService,
-        LoggerInterface $logger,
+        protected ClientService $clientService,
+        protected AccessTokenService $accessTokenService,
+        protected RefreshTokenService $refreshTokenService,
+        protected LoggerInterface $logger,
         array $grants = []
     ) {
-        $this->clientService = $clientService;
-        $this->accessTokenService = $accessTokenService;
-        $this->refreshTokenService = $refreshTokenService;
-        $this->logger = $logger;
-
         foreach ($grants as /** @var GrantInterface $grant */ $grant) {
             if ($grant instanceof AuthorizationServerAwareInterface) {
                 $grant->setAuthorizationServer($this);
@@ -315,8 +285,10 @@ class AuthorizationServer implements AuthorizationServerInterface
      * @param bool $allowPublicClients
      * @return Client|null
      */
-    protected function getClient(ServerRequestInterface $request, bool $allowPublicClients): ?Client
-    {
+    protected function getClient(
+        ServerRequestInterface $request,
+        bool $allowPublicClients
+    ): ?Client {
         [$id, $secret] = $this->getClientCredentialsFromRequest($request);
 
         // If the grant type we are issuing does not allow public clients, and that the secret is

@@ -53,5 +53,8 @@ interface ResourceServerInterface
      * @param string|array<string> $scopes
      * @return AccessToken|null
      */
-    public function getAccessToken(ServerRequestInterface $request, $scopes = []): ?AccessToken;
+    public function getAccessToken(
+        ServerRequestInterface $request,
+        string|array $scopes = []
+    ): ?AccessToken;
 }

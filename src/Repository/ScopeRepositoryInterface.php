@@ -49,13 +49,13 @@ interface ScopeRepositoryInterface
 
     /**
      * Return all scopes
-     * @return array<Scope>
+     * @return Scope[]
      */
     public function getAllScopes(): array;
 
     /**
      * Return all default scopes
-     * @return array<Scope>
+     * @return Scope[]
      */
     public function getDefaultScopes(): array;
 }

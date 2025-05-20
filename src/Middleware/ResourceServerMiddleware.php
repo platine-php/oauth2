@@ -56,19 +56,12 @@ use Platine\OAuth2\Response\OAuthJsonResponse;
 class ResourceServerMiddleware implements MiddlewareInterface
 {
     /**
-     * The resource server instance
-     * @var ResourceServerInterface
-     */
-    protected ResourceServerInterface $resourceServer;
-
-    /**
      * Create new instance
      * @param ResourceServerInterface $resourceServer
      */
     public function __construct(
-        ResourceServerInterface $resourceServer
+        protected ResourceServerInterface $resourceServer
     ) {
-        $this->resourceServer = $resourceServer;
     }
 
 

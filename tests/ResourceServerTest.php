@@ -64,6 +64,7 @@ class ResourceServerTest extends PlatineTestCase
         $token = $this->getMockInstance(AccessToken::class, [
             'getToken' => 'my_token',
             'isValid' => true,
+            'getScopes' => [],
         ]);
         $accessTokenService = $this->getMockInstance(AccessTokenService::class, [
             'getToken' => $token

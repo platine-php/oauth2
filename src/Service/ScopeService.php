@@ -42,18 +42,11 @@ use Platine\OAuth2\Repository\ScopeRepositoryInterface;
 class ScopeService
 {
     /**
-     * The ScopeRepository instance
-     * @var ScopeRepositoryInterface
-     */
-    protected ScopeRepositoryInterface $scopeRepository;
-
-    /**
      * Create new instance
      * @param ScopeRepositoryInterface $scopeRepository
      */
-    public function __construct(ScopeRepositoryInterface $scopeRepository)
+    public function __construct(protected ScopeRepositoryInterface $scopeRepository)
     {
-        $this->scopeRepository = $scopeRepository;
     }
 
     /**
@@ -68,7 +61,7 @@ class ScopeService
 
     /**
      * Return all scopes
-     * @return array<Scope>
+     * @return Scope[]
      */
     public function all(): array
     {
@@ -77,7 +70,7 @@ class ScopeService
 
     /**
      * Return all defaults scopes
-     * @return array<Scope>
+     * @return Scope[]
      */
     public function defaults(): array
     {

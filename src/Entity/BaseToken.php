@@ -178,7 +178,7 @@ abstract class BaseToken
      * @param string|array<string> $scopes
      * @return bool
      */
-    public function matchScopes($scopes): bool
+    public function matchScopes(string|array $scopes): bool
     {
         if (is_string($scopes)) {
             $scopes = explode(' ', $scopes);
@@ -194,7 +194,7 @@ abstract class BaseToken
      * @param string|array<string> $scopes
      * @return bool
      */
-    public function isValid($scopes): bool
+    public function isValid(string|array $scopes): bool
     {
         if ($this->isExpired()) {
             return false;

@@ -45,19 +45,12 @@ use Platine\OAuth2\AuthorizationServerInterface;
 class RevocationRequestMiddleware implements MiddlewareInterface
 {
     /**
-     * The authorization server instance
-     * @var AuthorizationServerInterface
-     */
-    protected AuthorizationServerInterface $authorizationServer;
-
-    /**
      * Create new instance
      * @param AuthorizationServerInterface $authorizationServer
      */
     public function __construct(
-        AuthorizationServerInterface $authorizationServer
+        protected AuthorizationServerInterface $authorizationServer
     ) {
-        $this->authorizationServer = $authorizationServer;
     }
 
 

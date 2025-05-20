@@ -52,37 +52,16 @@ class RefreshTokenGrant extends BaseGrant
     public const GRANT_RESPONSE_TYPE = '';
 
     /**
-     * The AccessTokenService
-     * @var AccessTokenService
-     */
-    protected AccessTokenService $accessTokenService;
-
-    /**
-     * The RefreshTokenService
-     * @var RefreshTokenService
-     */
-    protected RefreshTokenService $refreshTokenService;
-
-    /**
-     * The Configuration instance
-     * @var Configuration
-     */
-    protected Configuration $configuration;
-
-    /**
      * Create new instance
      * @param AccessTokenService $accessTokenService
      * @param RefreshTokenService $refreshTokenService
      * @param Configuration $configuration
      */
     public function __construct(
-        AccessTokenService $accessTokenService,
-        RefreshTokenService $refreshTokenService,
-        Configuration $configuration
+        protected AccessTokenService $accessTokenService,
+        protected RefreshTokenService $refreshTokenService,
+        protected Configuration $configuration
     ) {
-        $this->accessTokenService = $accessTokenService;
-        $this->refreshTokenService = $refreshTokenService;
-        $this->configuration = $configuration;
     }
 
         /**

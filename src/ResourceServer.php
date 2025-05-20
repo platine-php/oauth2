@@ -50,19 +50,12 @@ use Platine\OAuth2\Service\AccessTokenService;
 class ResourceServer implements ResourceServerInterface
 {
     /**
-     * The AccessTokenService
-     * @var AccessTokenService
-     */
-    protected AccessTokenService $accessTokenService;
-
-    /**
      * Create new instance
      * @param AccessTokenService $accessTokenService
      */
     public function __construct(
-        AccessTokenService $accessTokenService
+        protected AccessTokenService $accessTokenService
     ) {
-        $this->accessTokenService = $accessTokenService;
     }
 
     /**
@@ -73,8 +66,10 @@ class ResourceServer implements ResourceServerInterface
      *
      * @link   http://tools.ietf.org/html/rfc6750#page-5
      */
-    public function getAccessToken(ServerRequestInterface $request, $scopes = []): ?AccessToken
-    {
+    public function getAccessToken(
+        ServerRequestInterface $request,
+        string|array $scopes = []
+    ): ?AccessToken {
         $accessToken = $this->getTokenFromRequest($request);
         if ($accessToken === null) {
             return null;

@@ -51,19 +51,12 @@ class ClientCredentialsGrant extends BaseGrant
     public const GRANT_RESPONSE_TYPE = '';
 
     /**
-     * The AccessTokenService
-     * @var AccessTokenService
-     */
-    protected AccessTokenService $accessTokenService;
-
-    /**
      * Create new instance
      * @param AccessTokenService $accessTokenService
      */
     public function __construct(
-        AccessTokenService $accessTokenService
+        protected AccessTokenService $accessTokenService
     ) {
-        $this->accessTokenService = $accessTokenService;
     }
 
      /**

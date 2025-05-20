@@ -48,7 +48,7 @@ class OAuthJsonResponse extends Response
      * @param string $reasonPhrase
      */
     public function __construct(
-        $data,
+        mixed $data,
         int $statusCode = 200,
         string $reasonPhrase = ''
     ) {

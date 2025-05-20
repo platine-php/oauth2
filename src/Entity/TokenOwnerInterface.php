@@ -45,5 +45,5 @@ interface TokenOwnerInterface
      * Return the token owner id
      * @return mixed
      */
-    public function getOwnerId();
+    public function getOwnerId(): mixed;
 }

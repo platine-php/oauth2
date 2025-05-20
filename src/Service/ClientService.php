@@ -42,18 +42,11 @@ use Platine\OAuth2\Repository\ClientRepositoryInterface;
 class ClientService
 {
     /**
-     * The ClientRepositoryInterface instance
-     * @var ClientRepositoryInterface
-     */
-    protected ClientRepositoryInterface $clientRepository;
-
-    /**
      * Create new instance
      * @param ClientRepositoryInterface $clientRepository
      */
-    public function __construct(ClientRepositoryInterface $clientRepository)
+    public function __construct(protected ClientRepositoryInterface $clientRepository)
     {
-        $this->clientRepository = $clientRepository;
     }
 
     /**

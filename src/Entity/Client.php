@@ -87,14 +87,14 @@ class Client
      */
     public static function createNewClient(
         string $name,
-        $redirectUris = null,
+        string|array $redirectUris = null,
         ?array $scopes = null
     ): self {
         if (is_string($redirectUris)) {
             $redirectUris = explode(' ', $redirectUris);
         }
 
-        if ($redirectUris !== null && is_array($redirectUris)) {
+        if ($redirectUris !== null) {
             foreach ($redirectUris as &$redirectUri) {
                 $redirectUri = trim((string) $redirectUri);
             }
@@ -120,7 +120,7 @@ class Client
         $client->id = $data['id'];
         $client->name = $data['name'];
         $client->secret = $data['secret'];
-        $client->redirectUris = $data['redirect_uris'];
+        $client->redirectUris = (array) $data['redirect_uris'];
         $client->scopes = $data['scopes'];
 
         return $client;

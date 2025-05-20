@@ -32,11 +32,13 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2\Entity;
 
+use Stringable;
+
 /**
  * @class Scope
  * @package Platine\OAuth2\Entity
  */
-class Scope
+class Scope implements Stringable
 {
     /**
      * The scope id
