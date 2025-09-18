@@ -32,6 +32,7 @@ declare(strict_types=1);
 
 namespace Platine\OAuth2\Entity;
 
+use DateMalformedStringException;
 use DateTime;
 use DateTimeInterface;
 
@@ -233,9 +234,18 @@ abstract class BaseToken
 
         $expireAt = null;
         if ($ttl > 0) {
-            $res = (new DateTime())->modify(sprintf('%+d seconds', $ttl));
-            if ($res !== false) {
-                $expireAt = $res;
+            // Since PHP >= 8.3 DateTime::modify() now throws
+            // DateMalformedStringException if an invalid string is passed.
+            if (PHP_VERSION_ID >= 80300) {
+                try {
+                    $expireAt = (new DateTime())->modify(sprintf('%+d seconds', $ttl));
+                } catch (DateMalformedStringException $ex) {
+                }
+            } else {
+                $res = (new DateTime())->modify(sprintf('%+d seconds', $ttl));
+                if ($res !== false) {
+                    $expireAt = $res;
+                }
             }
         }
 

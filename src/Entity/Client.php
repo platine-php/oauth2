@@ -87,7 +87,7 @@ class Client
      */
     public static function createNewClient(
         string $name,
-        string|array $redirectUris = null,
+        string|array|null $redirectUris = null,
         ?array $scopes = null
     ): self {
         if (is_string($redirectUris)) {
